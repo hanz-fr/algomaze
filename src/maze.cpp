@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "include/maze.h"
+#include "../include/maze.h"
 
 const int row = 25;
 const int col = 25;

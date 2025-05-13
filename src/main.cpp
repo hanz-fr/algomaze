@@ -1,4 +1,4 @@
-#include "include/maze.h"
+#include "../include/maze.h"
 #include <stdio.h>
 #include <iostream>
 #include <vector>
