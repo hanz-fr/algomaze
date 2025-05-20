@@ -38,20 +38,12 @@ int main()
             switch (c)
             {
             case KEY_UP:
-                moveUp(row_pos);
-                printRowCol();
                 break;
             case KEY_DOWN:
-                moveDown(row_pos);
-                printRowCol();
                 break;
             case KEY_LEFT:
-                moveLeft(col_pos);
-                printRowCol();
                 break;
             case KEY_RIGHT:
-                moveRight(col_pos);
-                printRowCol();
                 break;
             default:
                 std::cout << "Unknown special key: " << c << std::endl;
