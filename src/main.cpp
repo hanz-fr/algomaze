@@ -6,15 +6,6 @@
 #include <iostream>
 #include <vector>
 
-void clearScreen()
-{
-    #ifdef _WIN32
-        system("cls"); // Windows
-    #else
-        system("clear"); // Linux / Mac
-    #endif
-}
-
 int main()
 {
     /* std::vector<std::vector<bool>> maze = createEmptyMaze();
