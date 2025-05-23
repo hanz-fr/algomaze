@@ -18,6 +18,7 @@ int main()
 
     std::vector<std::vector<bool>> maze = initiateMaze(); // inisialisasi maze awal
 
+    showPlayerPos(player_col_pos, player_row_pos);
     renderMaze(player_row_pos, player_col_pos, maze);
 
     while (1)
@@ -45,7 +46,7 @@ int main()
             }
 
             clearScreen();
-            showPlayerPos(player_row_pos, player_col_pos);
+            showPlayerPos(player_col_pos, player_row_pos);
             renderMaze(player_row_pos, player_col_pos, maze);
         }
     }

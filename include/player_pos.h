@@ -1,6 +1,6 @@
 #ifndef PLAYER_POS_H
 #define PLAYER_POS_H
 
-void showPlayerPos(int row_pos, int col_pos);
+void showPlayerPos(int col_pos, int row_pos);
 
 #endif
