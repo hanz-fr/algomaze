@@ -49,22 +49,22 @@ int main()
             case KEY_UP:
                 clearScreen();
                 player_row_pos = moveUp(player_row_pos);
-                renderMaze(game_maze, player_row_pos, player_col_pos);
+                // renderMaze(game_maze, player_row_pos, player_col_pos);
                 break;
             case KEY_DOWN:
                 clearScreen();
                 player_row_pos = moveDown(player_row_pos);
-                renderMaze(game_maze, player_row_pos, player_col_pos);
+                // renderMaze(game_maze, player_row_pos, player_col_pos);
                 break;
             case KEY_LEFT:
                 clearScreen();
                 player_col_pos = moveLeft(player_col_pos);
-                renderMaze(game_maze, player_row_pos, player_col_pos);
+                // renderMaze(game_maze, player_row_pos, player_col_pos);
                 break;
             case KEY_RIGHT:
                 clearScreen();
                 player_col_pos = moveRight(player_col_pos);
-                renderMaze(game_maze, player_row_pos, player_col_pos);
+                // renderMaze(game_maze, player_row_pos, player_col_pos);
                 break;
             default:
                 std::cout << "Unknown special key: " << c << std::endl;

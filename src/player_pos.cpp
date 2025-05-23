@@ -9,6 +9,5 @@ int player_col_pos ;
 // Fungsi untuk mencetak posisi pemain
 void printRowCol(int row_pos, int col_pos)
 {
-    clearScreen();
     std::cout << "[" << row_pos << "]" << "[" << col_pos << "]" << std::endl;
 }
