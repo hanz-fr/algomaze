@@ -1,50 +1,54 @@
-#include "../include/maze.h"
-#include "../include/empty_maze.h"
-#include "../include/keyinp.h"
-#include <conio.h>
 #include <stdio.h>
 #include <iostream>
-#include <vector>
+#include <conio.h>
+#include "../include/player_movement.h"
+#include "../include/keyinp.h"
+#include "../include/clear_screen.h"
+#include "../include/render_maze.h"
+#include "../include/maze.h"
+#include "../include/player_pos.h"
 
 int main()
 {
-    /* std::vector<std::vector<bool>> maze = createEmptyMaze();
-
-    for (const auto& row : maze) {
-        for (bool cell : row) {
-            std::cout << (cell ? char(219) : ' ');
-        }
-        std::cout << std::endl;
-    } */
-
     int c = 0;
+
+    // posisi start player
+    int player_row_pos = 1;
+    int player_col_pos = 0;
+
+    std::vector<std::vector<bool>> maze = initiateMaze(); // inisialisasi maze awal
+
+    renderMaze(player_row_pos, player_col_pos, maze);
 
     while (1)
     {
         c = getch();
 
-        if (c == 0 || c == 224)
-        {
+        while (true) {
+        char c = getch();
+
+        if (c == 0 || c == -32) {
             c = getch();
-            switch (c)
-            {
-            case KEY_UP:
-                break;
-            case KEY_DOWN:
-                break;
-            case KEY_LEFT:
-                break;
-            case KEY_RIGHT:
-                break;
-            default:
-                std::cout << "Unknown special key: " << c << std::endl;
-                break;
+            int new_row = player_row_pos;
+            int new_col = player_col_pos;
+
+            switch (c) {
+                case KEY_UP:    new_col--; break;
+                case KEY_DOWN:  new_col++; break;
+                case KEY_LEFT:  new_row--; break;
+                case KEY_RIGHT: new_row++; break;
             }
+
+            if (isPlayerMoveValid(new_row, new_col, maze)) {
+                player_row_pos = new_row;
+                player_col_pos = new_col;
+            }
+
+            clearScreen();
+            showPlayerPos(player_row_pos, player_col_pos);
+            renderMaze(player_row_pos, player_col_pos, maze);
         }
-        else
-        {
-            std::cout << "Not an arrow key." << std::endl;
-        }
+    }
     }
 
     return 0;
