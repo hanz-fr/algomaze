@@ -31,6 +31,9 @@ int main()
         std::cerr << "Error: Posisi pemain di luar batas maze." << std::endl;
     }
 
+    clearScreen();
+    renderMaze(game_maze, player_row_pos, player_col_pos);
+    printRowCol(player_row_pos, player_col_pos);
 
     int c = 0;
 
@@ -47,24 +50,20 @@ int main()
             switch (c)
             {
             case KEY_UP:
-                clearScreen();
+                // clearScreen();
                 player_row_pos = moveUp(player_row_pos);
-                // renderMaze(game_maze, player_row_pos, player_col_pos);
                 break;
             case KEY_DOWN:
-                clearScreen();
+                // clearScreen();
                 player_row_pos = moveDown(player_row_pos);
-                // renderMaze(game_maze, player_row_pos, player_col_pos);
                 break;
             case KEY_LEFT:
-                clearScreen();
+                // clearScreen();
                 player_col_pos = moveLeft(player_col_pos);
-                // renderMaze(game_maze, player_row_pos, player_col_pos);
                 break;
             case KEY_RIGHT:
-                clearScreen();
+                // clearScreen();
                 player_col_pos = moveRight(player_col_pos);
-                // renderMaze(game_maze, player_row_pos, player_col_pos);
                 break;
             default:
                 std::cout << "Unknown special key: " << c << std::endl;
