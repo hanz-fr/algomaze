@@ -6,8 +6,6 @@
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
 
-void printRowCol();
-
 int moveUp(int current_row);
 
 int moveDown(int current_row);

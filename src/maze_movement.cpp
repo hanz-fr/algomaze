@@ -1,4 +1,4 @@
-#include "../include/render_maze.h"
+ #include "../include/render_maze.h"
 #include "../include/clear_screen.h"
 #include "../include/keyinp.h"
 #include "../include/player_pos.h"
