@@ -27,12 +27,7 @@ int main()
     {
         std::cerr << "Error: Posisi pemain di luar batas maze." << std::endl;
     }
-
-    while (1)
-    {
-        c = getch();
-
-        while (true) {
+    while (true) {
         char c = getch();
 
         if (c == 0 || c == -32) {
@@ -50,13 +45,13 @@ int main()
             if (isPlayerMoveValid(new_row, new_col, maze)) {
                 player_row_pos = new_row;
                 player_col_pos = new_col;
-            }
 
-            clearScreen();
-            showPlayerPos(player_col_pos, player_row_pos);
-            renderMaze(player_row_pos, player_col_pos, maze);
+                // render is now moved to only when move is valid
+                clearScreen();
+                showPlayerPos(player_col_pos, player_row_pos);
+                renderMaze(player_row_pos, player_col_pos, maze);
+            }
         }
-    }
     }
 
     return 0;
