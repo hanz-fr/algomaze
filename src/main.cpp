@@ -7,6 +7,7 @@
 #include "../include/render_maze.h"
 #include "../include/maze.h"
 #include "../include/player_pos.h"
+#include "../include/vector_to_graph.h"
 
 int main()
 {
@@ -17,9 +18,15 @@ int main()
     int player_col_pos = 0;
 
     std::vector<std::vector<bool>> maze = initiateMaze(); // inisialisasi maze awal
+    std::map<int, std::vector<int>> maze_graph = buildGraph(maze);
 
     showPlayerPos(player_col_pos, player_row_pos);
     renderMaze(player_row_pos, player_col_pos, maze);
+
+    if (player_row_pos >= maze.size() || player_col_pos >= maze[0].size() || !maze[player_row_pos][player_col_pos]) 
+    {
+        std::cerr << "Error: Posisi pemain di luar batas maze." << std::endl;
+    }
 
     while (1)
     {
