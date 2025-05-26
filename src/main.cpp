@@ -46,7 +46,7 @@ int main()
                 player_row_pos = new_row;
                 player_col_pos = new_col;
 
-                // render is now moved to only when move is valid
+                // only render when move is valid
                 clearScreen();
                 showPlayerPos(player_col_pos, player_row_pos);
                 renderMaze(player_row_pos, player_col_pos, maze);
