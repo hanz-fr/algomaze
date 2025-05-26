@@ -2,6 +2,6 @@
 #define RENDER_MAZE_H
 #include <vector>
 
-void renderMaze(int current_player_row_pos, int current_player_col_pos);
+void renderMaze(int player_row, int player_col, const std::vector<std::vector<bool>> &maze);
 
 #endif
