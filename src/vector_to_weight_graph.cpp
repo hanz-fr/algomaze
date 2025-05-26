@@ -10,7 +10,7 @@ struct Element
     int id;
     pair<int, int> position;
     string type;
-    int weight = 0;
+    pair <int, int> weight = {0,0};
 };
 
 struct Edge
@@ -75,7 +75,7 @@ map<int, vector<int>> buildGraph (const vector<vector<bool>>& maze_data) {
                         // if in elements: same row, less col
                         for (int j = elements.size() - 1; j >= 0; --j) {
                             if (elements[j].position.first == r && elements[j].type == "node") {
-                                elements[j].weight++;
+                                elements[j].weight.second++;
                                 break;
                             }
                         }
@@ -85,11 +85,19 @@ map<int, vector<int>> buildGraph (const vector<vector<bool>>& maze_data) {
                         element.type = "vertical";
                         for (int j = elements.size() - 1; j >= 0; --j) {
                             if (elements[j].position.second == c && elements[j].type == "node") {
-                                elements[j].weight++;
+                                elements[j].weight.first++;
                                 break;
                             }
                         }
                     }
+                    else {
+                        // is a node
+                    }
+                }
+                else {
+                    // is a node
+                    // IDEA: do the same thing for nodes
+                    // check if node has a node next to it (doesnt need a loop, just check row-1/col-1)
                 }
                 // put element to elements vector
                 elements.push_back(element);
@@ -98,13 +106,26 @@ map<int, vector<int>> buildGraph (const vector<vector<bool>>& maze_data) {
         }
     }
 
+    // NOTE: for node that adjacent to other node, maybe the weight should be 1 instead
+
+    // NOTE: EVERY NODE'S EDGES LOOK LIKE THIS
+    // V →
+    // ↓
+    // bug: so when a node go to both of that direction, the weight might get mixed up (right + down) 
+
+    // theory for connecting vertices (edges)
+    // depending on type (vertical/horizontal) add row/col with weight+1
+    // [0][0] -> [0][10] (weight: 9)
+
     // fetch vector
     for (int i = 0; i < elements.size(); ++i) {
-        cout << "["<< elements[i].position.first << "]" << "["<< elements[i].position.second << "] is a " << elements[i].type;
+        // cout << "["<< elements[i].position.first << "]" << "["<< elements[i].position.second << "] is a " << elements[i].type;
         if (elements[i].type == "node") {
-            cout << " has weight: " << elements[i].weight;
+            cout << "NODE [" << elements[i].position.first << "]" << "["<< elements[i].position.second << "]";
+            cout << " WEIGHT [" << elements[i].weight.first << "]" << "["<< elements[i].weight.second << "]";
+            cout << " ID: " << elements[i].id;
+            cout << endl;
         }
-        cout << endl;
     }
 
     return graph;
