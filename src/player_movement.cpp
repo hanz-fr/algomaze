@@ -12,5 +12,5 @@ bool isPlayerMoveValid(int new_row, int new_col, const std::vector<std::vector<b
         return false;
     if (new_row < 0 || new_row >= maze[0].size()) // Y axis
         return false;                   
-    return maze[new_col][new_row] == 0; 
+    return maze[new_row][new_col] == 0; 
 };
