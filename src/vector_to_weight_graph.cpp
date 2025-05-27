@@ -16,24 +16,20 @@ struct Element
 struct Edge
 {
     // from, to, weight
-    int u, v, w;
+    // int u, v, w;
+    pair<int, int> u;
+    pair<int, int> v;
+    int w;
 };
 
 struct Graph
 {
     // vertices, edges
     int V, E;
-    Edge *edge;
+    // Edge *edge;
+    vector<pair<int, int>> vertices;
+    vector<Edge> edges;
 };
-
-Graph *createGraph (int V, int E) {
-    Graph *graph = new Graph;
-    graph->V = V;
-    graph->E = E;
-    graph->edge = new Edge[E];
-
-    return graph;
-}
 
 int countNeighbors (int r, int c, const vector<vector<bool>>& maze_data) {
     int rows = maze_data.size();
@@ -48,13 +44,14 @@ int countNeighbors (int r, int c, const vector<vector<bool>>& maze_data) {
     return count;
 }
 
-map<int, vector<int>> buildGraph (const vector<vector<bool>>& maze_data) {
+Graph buildGraph (const vector<vector<bool>>& maze_data) {
     vector<Element> elements; 
-    map<int, vector<int>> graph;
-    int id = 0;
-    
+    Graph graph;
+
     int rows = maze_data.size();
     int cols = maze_data[0].size();
+    
+    int vertices = 0;
     
     // fetch maze
     for (int r = 0; r < rows; ++r) {
@@ -63,7 +60,6 @@ map<int, vector<int>> buildGraph (const vector<vector<bool>>& maze_data) {
             if (!maze_data[r][c]) {
                 Element element;
                 element.position = {r, c};
-                element.id = id;
                 element.type = "node";
                 
                 int neighbors = countNeighbors(r, c, maze_data);
@@ -90,48 +86,56 @@ map<int, vector<int>> buildGraph (const vector<vector<bool>>& maze_data) {
                             }
                         }
                     }
-                    else {
-                        // is a node
-                    }
-                }
-                else {
-                    // is a node
-                    // IDEA: do the same thing for nodes
-                    // check if node has a node next to it (doesnt need a loop, just check row-1/col-1)
                 }
                 // put element to elements vector
                 elements.push_back(element);
-                ++id;
             }
         }
     }
 
-    // NOTE: for node that adjacent to other node, maybe the weight should be 1 instead
-
-    // NOTE: EVERY NODE'S EDGES LOOK LIKE THIS
-    // V →
-    // ↓
-    // bug: so when a node go to both of that direction, the weight might get mixed up (right + down) 
-
-    // theory for connecting vertices (edges)
-    // depending on type (vertical/horizontal) add row/col with weight+1
-    // [0][0] -> [0][10] (weight: 9)
-
-    // fetch vector
+    // LAST STEP
+    // fetch nodes
     for (int i = 0; i < elements.size(); ++i) {
-        // cout << "["<< elements[i].position.first << "]" << "["<< elements[i].position.second << "] is a " << elements[i].type;
         if (elements[i].type == "node") {
-            cout << "NODE [" << elements[i].position.first << "]" << "["<< elements[i].position.second << "]";
-            cout << " WEIGHT [" << elements[i].weight.first << "]" << "["<< elements[i].weight.second << "]";
-            cout << " ID: " << elements[i].id;
-            cout << endl;
+            pair<int, int> u = elements[i].position;
+            pair<int, int> w = elements[i].weight;
+
+            // each node do:
+            // how would it know if its a node without fetching?
+            // ^^ all node is already defined, so there wouldnt be a weight by mistake, just need to check if its a 0 or 1 element using maze matrix index
+            
+            // CREATE EDGE
+            // horizontal: [r][c + weight.col + 1]
+            if (u.second + w.second + 1 < cols && maze_data[u.first][u.second + w.second + 1] == 0) {
+                graph.edges.push_back({u, {u.first, u.second + w.second + 1}, w.second});
+            }
+
+            // vertical: [r + weight.row + 1][c]
+            if (u.first + w.first + 1 < rows && maze_data[u.first + w.first + 1][u.second] == 0) {
+                graph.edges.push_back({u, {u.first + w.first + 1, u.second}, w.first});
+            }
+            graph.vertices.push_back(u);
+            ++vertices;
         }
     }
+    graph.V = vertices;
+    graph.E = graph.edges.size();
+
+    // fetch vector
+    // for (int i = 0; i < elements.size(); ++i) {
+    //     // cout << "["<< elements[i].position.first << "]" << "["<< elements[i].position.second << "] is a " << elements[i].type;
+    //     if (elements[i].type == "node") {
+    //         cout << "NODE [" << elements[i].position.first << "]" << "["<< elements[i].position.second << "]";
+    //         cout << " WEIGHT [" << elements[i].weight.first << "]" << "["<< elements[i].weight.second << "]";
+    //         cout << " ID: " << elements[i].id;
+    //         cout << endl;
+    //     }
+    // }
 
     return graph;
 }
 
-int main () {
+int main () {   
     vector<vector<bool>> maze = {
         {1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
         {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -167,6 +171,25 @@ int main () {
         cout << '\n';
     }
 
-    map<int, vector<int>> graph = buildGraph(maze);
+    Graph graph = buildGraph(maze);
+
+    cout << "Graph:" << endl;
+    cout << "Vertices: " << graph.V << endl;
+    cout << "Edges: " << graph.E << endl << endl;
+
+    cout << "Vertices: " << endl;
+    for (int i = 0; i < graph.V; ++i) {
+        cout << "[" << graph.vertices[i].first << "][" << graph.vertices[i].second << "]" << endl; 
+    }
+    cout << endl;
+
+    cout << "Edges (U,V,W): " << endl;
+    for (int i = 0; i < graph.E; ++i) {
+        cout << "[" << graph.edges[i].u.first << "][" << graph.edges[i].u.second << "] ";
+        cout << "[" << graph.edges[i].v.first << "][" << graph.edges[i].v.second << "] ";
+        cout << "Weight: " << graph.edges[i].w << endl; 
+    }
+    cout << endl;
+
     return 0;
 }

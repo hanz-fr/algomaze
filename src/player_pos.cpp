@@ -2,8 +2,8 @@
 #include "../include/player_pos.h"
 #include <iostream>
 
-void showPlayerPos(int col_pos, int row_pos)
+void showPlayerPos(int row_pos, int col_pos)
 {
     clearScreen();
-    std::cout << "Position: [" << col_pos << "]"  "[" << row_pos << "]" << std::endl;
+    std::cout << "Position: [" << row_pos << "]"  "[" << col_pos << "]" << std::endl;
 }

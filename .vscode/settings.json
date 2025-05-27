@@ -57,6 +57,16 @@
         "map": "cpp",
         "xtree": "cpp",
         "regex": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "algorithm": "cpp",
+        "chrono": "cpp",
+        "forward_list": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "optional": "cpp",
+        "random": "cpp",
+        "ratio": "cpp",
+        "sstream": "cpp",
+        "stop_token": "cpp"
     }
 }
