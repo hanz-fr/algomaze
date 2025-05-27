@@ -27,6 +27,7 @@ struct Graph
     // vertices, edges
     int V, E;
     // Edge *edge;
+    vector<pair<int, int>> vertices;
     vector<Edge> edges;
 };
 
@@ -113,6 +114,7 @@ Graph buildGraph (const vector<vector<bool>>& maze_data) {
             if (u.first + w.first + 1 < rows && maze_data[u.first + w.first + 1][u.second] == 0) {
                 graph.edges.push_back({u, {u.first + w.first + 1, u.second}, w.first});
             }
+            graph.vertices.push_back(u);
             ++vertices;
         }
     }
@@ -173,7 +175,21 @@ int main () {
 
     cout << "Graph:" << endl;
     cout << "Vertices: " << graph.V << endl;
-    cout << "Edges: " << graph.E << endl;
+    cout << "Edges: " << graph.E << endl << endl;
+
+    cout << "Vertices: " << endl;
+    for (int i = 0; i < graph.V; ++i) {
+        cout << "[" << graph.vertices[i].first << "][" << graph.vertices[i].second << "]" << endl; 
+    }
+    cout << endl;
+
+    cout << "Edges (U,V,W): " << endl;
+    for (int i = 0; i < graph.E; ++i) {
+        cout << "[" << graph.edges[i].u.first << "][" << graph.edges[i].u.second << "] ";
+        cout << "[" << graph.edges[i].v.first << "][" << graph.edges[i].v.second << "] ";
+        cout << "Weight: " << graph.edges[i].w << endl; 
+    }
+    cout << endl;
 
     return 0;
 }
