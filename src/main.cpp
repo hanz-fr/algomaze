@@ -8,48 +8,107 @@
 #include "../include/maze.h"
 #include "../include/player_pos.h"
 #include "../include/vector_to_graph.h"
+#include "../include/maze_completed.h"
 
 int main()
 {
     int c = 0;
 
-    // posisi start player
-    int player_row_pos = 1;
-    int player_col_pos = 0;
+    // player starting position
+    int player_row_pos = 0;
+    int player_col_pos = 1;
 
-    std::vector<std::vector<bool>> maze = initiateMaze(); // inisialisasi maze awal
-    std::map<int, std::vector<int>> maze_graph = buildGraph(maze);
+    // maze finish position
+    int maze_exit_row = 25;
+    int maze_exit_col = 16;
 
-    showPlayerPos(player_col_pos, player_row_pos);
+    std::vector<std::vector<bool>> maze = initiateMaze();          // first maze initialization
+    std::map<int, std::vector<int>> maze_graph = buildGraph(maze); // convert to graph (adjacency matrix)
+
+    // initial render of player and maze
+    showPlayerPos(player_row_pos, player_col_pos);
     renderMaze(player_row_pos, player_col_pos, maze);
 
-    if (player_row_pos >= maze.size() || player_col_pos >= maze[0].size() || !maze[player_row_pos][player_col_pos]) 
+    // player outside maze boundary
+    if (player_col_pos >= maze.size() || player_row_pos >= maze[0].size() || !maze[player_col_pos][player_row_pos])
     {
-        std::cerr << "Error: Posisi pemain di luar batas maze." << std::endl;
+        std::cerr << "Error: Posisi pemain di luar batas labirin." << std::endl;
     }
-    while (true) {
+
+    while (true)
+    {
         char c = getch();
 
-        if (c == 0 || c == -32) {
+        if (c == 0 || c == -32)
+        {
             c = getch();
             int new_row = player_row_pos;
             int new_col = player_col_pos;
 
-            switch (c) {
-                case KEY_UP:    new_col--; break;
-                case KEY_DOWN:  new_col++; break;
-                case KEY_LEFT:  new_row--; break;
-                case KEY_RIGHT: new_row++; break;
+            switch (c)
+            {
+            case KEY_UP:
+                new_row--;
+                break;
+            case KEY_DOWN:
+                new_row++;
+                break;
+            case KEY_LEFT:
+                new_col--;
+                break;
+            case KEY_RIGHT:
+                new_col++;
+                break;
             }
 
-            if (isPlayerMoveValid(new_row, new_col, maze)) {
+            if (isPlayerMoveValid(new_row, new_col, maze))
+            {
                 player_row_pos = new_row;
                 player_col_pos = new_col;
 
                 // only render when move is valid
-                clearScreen();
-                showPlayerPos(player_col_pos, player_row_pos);
-                renderMaze(player_row_pos, player_col_pos, maze);
+                // show congrats when maze completed
+                if (isCompleted(player_row_pos, player_col_pos, maze_exit_row, maze_exit_col))
+                {
+                    clearScreen();
+                    int inp;
+
+                    std::cout << "Selamat anda telah menyelesaikan labirin ini! \n";
+                    std::cout << "Berikut hadiah untuk anda: 🎁 \n";
+                    std::cout << "[1] Ulang \n";
+                    std::cout << "[2] Selesai \n";
+                    std::cout << "> ";
+                    std::cin >> inp;
+
+                    if (inp == 1)
+                    {
+                        std::cout << "Mengulang kembali...";
+
+                        player_row_pos = 0;
+                        player_col_pos = 1;
+
+                        clearScreen();
+                        showPlayerPos(player_row_pos, player_col_pos);
+                        renderMaze(player_row_pos, player_col_pos, maze);
+                    }
+                    else if (inp == 2)
+                    {
+                        std::cout << "Program telah selesai.";
+                        break;
+                    }
+                    else
+                    {
+                        std::cout << "Input tidak valid!\n";
+                        std::cout << "Memberhentikan program...\n";
+                        break;
+                    }
+                }
+                else
+                {
+                    clearScreen();
+                    showPlayerPos(player_row_pos, player_col_pos);
+                    renderMaze(player_row_pos, player_col_pos, maze);
+                }
             }
         }
     }
