@@ -6,12 +6,4 @@
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
 
-int moveUp(int current_row);
-
-int moveDown(int current_row);
-
-int moveLeft(int current_col);
-
-int moveRight(int current_col);
-
 #endif

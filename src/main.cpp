@@ -29,12 +29,6 @@ int main()
     showPlayerPos(player_row_pos, player_col_pos);
     renderMaze(player_row_pos, player_col_pos, maze);
 
-    // player outside maze boundary
-    if (player_col_pos >= maze.size() || player_row_pos >= maze[0].size() || !maze[player_col_pos][player_row_pos])
-    {
-        std::cerr << "Error: Posisi pemain di luar batas labirin." << std::endl;
-    }
-
     while (true)
     {
         char c = getch();
@@ -68,7 +62,7 @@ int main()
 
                 // only render when move is valid
                 // show congrats when maze completed
-                if (isCompleted(player_row_pos, player_col_pos, maze_exit_row, maze_exit_col))
+                if (isCompleted(player_row_pos, player_col_pos, maze))
                 {
                     clearScreen();
                     int inp;
