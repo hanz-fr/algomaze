@@ -107,12 +107,12 @@ Graph buildGraph (const vector<vector<bool>>& maze_data) {
             // CREATE EDGE
             // horizontal: [r][c + weight.col + 1]
             if (u.second + w.second + 1 < cols && maze_data[u.first][u.second + w.second + 1] == 0) {
-                graph.edges.push_back({u, {u.first, u.second + w.second + 1}, w.second});
+                graph.edges.push_back({u, {u.first, u.second + w.second + 1}, w.second + 1}); // w only (on 3rd param) without +1 means adjacent vertex will weigh 0
             }
 
             // vertical: [r + weight.row + 1][c]
             if (u.first + w.first + 1 < rows && maze_data[u.first + w.first + 1][u.second] == 0) {
-                graph.edges.push_back({u, {u.first + w.first + 1, u.second}, w.first});
+                graph.edges.push_back({u, {u.first + w.first + 1, u.second}, w.first + 1}); // this too
             }
             graph.vertices.push_back(u);
             ++vertices;
@@ -120,17 +120,6 @@ Graph buildGraph (const vector<vector<bool>>& maze_data) {
     }
     graph.V = vertices;
     graph.E = graph.edges.size();
-
-    // fetch vector
-    // for (int i = 0; i < elements.size(); ++i) {
-    //     // cout << "["<< elements[i].position.first << "]" << "["<< elements[i].position.second << "] is a " << elements[i].type;
-    //     if (elements[i].type == "node") {
-    //         cout << "NODE [" << elements[i].position.first << "]" << "["<< elements[i].position.second << "]";
-    //         cout << " WEIGHT [" << elements[i].weight.first << "]" << "["<< elements[i].weight.second << "]";
-    //         cout << " ID: " << elements[i].id;
-    //         cout << endl;
-    //     }
-    // }
 
     return graph;
 }
