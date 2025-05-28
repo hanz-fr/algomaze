@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <regex>
+#include <sstream>
 #include "../include/welcome_press_any_key.h" 
 
 using namespace std;
@@ -60,7 +61,7 @@ bool validationPassword(const string & password)
 
 bool login(const string& username, const string& password)
 {
-    ifstream file("src/database.txt");
+    ifstream file("database/databaseUsers.txt");
     if (!file.is_open()) {
         cout << "Gagal membuka file database";
         return false;
@@ -75,18 +76,51 @@ bool login(const string& username, const string& password)
         string pass = baris.substr(pos + 1);
 
         if (user == username && pass == password) {
-            return true; // login berhasil
+            cout << "Login berhasil! Selamat datang, " << username << "!" << endl;
+            return true; 
         }
     }
 
     return false; // login gagal
 }
 
+//fungsi untuk ngecek apakah username sudah ada di database atau belum
+bool checkingUsername(const string& usernameToCheck) {
+    ifstream file("database/databaseUsers.txt");
+    if (!file.is_open()) {
+        cout << "Gagal membuka file database";
+        return false;
+    }
+
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string username, password;
+
+        
+        getline(ss, username, '|');
+        getline(ss, password);
+
+        if (username == usernameToCheck) {
+            return true; 
+        }
+    }
+
+    return false; 
+}
+
 //fungsi untuk regsiter 
 
 void registerUser(const string& username, const string& password)
 {
-    ofstream file("src/database.txt", ios::app);
+
+    if (checkingUsername(username)) 
+    {
+        cout << "Username sudah ada, silahkan pilih username lain." << endl;
+        return; 
+    }
+
+    ofstream file("database/databaseUsers.txt", ios::app);
     if (!file.is_open()) 
     {
         cout << "Gagal membuka file database";
@@ -94,9 +128,8 @@ void registerUser(const string& username, const string& password)
     }
 
     file << username << "|" << password << endl;
-    cout << "Register Success! " << endl;
+    cout << "Registrasi Sukses! Silahkan Login  " << endl; 
 };
-
 
 void menuLoginorRegister()
 {
@@ -137,7 +170,6 @@ int main()
                 if (validationUsername(username) && validationPassword(password))
                 {
                     registerUser(username, password);
-                    cout << "Registrasi berhasil! Silahkan login." << endl;
 
                     break;
                 } 
@@ -155,7 +187,6 @@ int main()
 
                 if (login(username, password))
                 {
-                    cout << "Login berhasil! Selamat datang, " << username << "!" << endl;
                     return 0;
                 } else 
                 {
