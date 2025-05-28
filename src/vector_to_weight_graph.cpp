@@ -5,14 +5,6 @@
 
 using namespace std;
 
-struct Element
-{
-    int id;
-    pair<int, int> position;
-    string type;
-    pair <int, int> weight = {0,0};
-};
-
 struct Edge
 {
     // from, to, weight
@@ -44,81 +36,68 @@ int countNeighbors (int r, int c, const vector<vector<bool>>& maze_data) {
     return count;
 }
 
+bool isWeight (int r, int c, const vector<vector<bool>>& maze_data) {
+    int rows = maze_data.size();
+    int cols = maze_data[0].size();
+    
+    // horizontal weight:
+    if (r-1 >= 0 && r+1 < rows && (maze_data[r-1][c] && maze_data[r+1][c]) && (!maze_data[r][c-1] && !maze_data[r][c+1])) {
+        return true;
+    }
+    // vertical weight:
+    if (c-1 >= 0 && c+1 < cols && (!maze_data[r-1][c] && !maze_data[r+1][c]) && (maze_data[r][c-1] && maze_data[r][c+1])) {
+        return true;
+    }
+
+    return false;
+}
+
 Graph buildGraph (const vector<vector<bool>>& maze_data) {
-    vector<Element> elements; 
     Graph graph;
 
     int rows = maze_data.size();
     int cols = maze_data[0].size();
-    
-    int vertices = 0;
-    
+
+    graph.V = 0;
+
     // fetch maze
     for (int r = 0; r < rows; ++r) {
         for (int c = 0; c < cols; ++c) {
-            // if element is 0
+            // if element is 0 AND (neighbor != 2 OR not a weight)
             if (!maze_data[r][c]) {
-                Element element;
-                element.position = {r, c};
-                element.type = "node";
-                
+                // check if not a weight
                 int neighbors = countNeighbors(r, c, maze_data);
-                if (neighbors == 2) {
-                    // is horizontal weight
-                    if (c - 1 >= 0 && c + 1 < cols && !maze_data[r][c - 1] && !maze_data[r][c + 1]) {
-                        element.type = "horizontal";
-                        // [r][c--]
-                        // if in elements: same row, less col
-                        for (int j = elements.size() - 1; j >= 0; --j) {
-                            if (elements[j].position.first == r && elements[j].type == "node") {
-                                elements[j].weight.second++;
-                                break;
-                            }
-                        }
+                if (neighbors != 2 || !isWeight(r, c, maze_data)) {
+                    // below here is node
+                    pair<int, int> u = {r, c};
+                    pair<int, int> w = {0, 0};
+
+                    // check has right and bottom neighbor
+                    while (c-1 >= 0 && c+1 < cols && !maze_data[r][c+w.second+1] && isWeight(r, c+w.second+1, maze_data)) {
+                        ++w.second;
                     }
-                    // is vertical weight
-                    else if (r - 1 >= 0 && r + 1 < rows && !maze_data[r - 1][c] && !maze_data[r + 1][c]) {
-                        element.type = "vertical";
-                        for (int j = elements.size() - 1; j >= 0; --j) {
-                            if (elements[j].position.second == c && elements[j].type == "node") {
-                                elements[j].weight.first++;
-                                break;
-                            }
-                        }
+                    while (r-1 >= 0 && r+1 < rows && !maze_data[r+w.first+1][c] && isWeight(r+w.first+1, c, maze_data)) {
+                        ++w.first;
                     }
+
+                    // only add edge if it the neighbor is 0
+                    // horizontal edge
+                    if (c-1 >= 0 && c+1 < cols && !maze_data[r][c+1]) {
+                        graph.edges.push_back({u, {r, c + w.second + 1}, w.second + 1});
+                    }
+                    // vertical edge
+                    if (r-1 >= 0 && r+1 < rows && !maze_data[r+1][c]) {
+                        graph.edges.push_back({u, {r + w.first + 1, c}, w.first + 1});
+                    }       
+
+                    graph.vertices.push_back({u});
+
+                    ++graph.V;             
                 }
-                // put element to elements vector
-                elements.push_back(element);
             }
         }
     }
 
-    // LAST STEP
-    // fetch nodes
-    for (int i = 0; i < elements.size(); ++i) {
-        if (elements[i].type == "node") {
-            pair<int, int> u = elements[i].position;
-            pair<int, int> w = elements[i].weight;
-
-            // each node do:
-            // how would it know if its a node without fetching?
-            // ^^ all node is already defined, so there wouldnt be a weight by mistake, just need to check if its a 0 or 1 element using maze matrix index
-            
-            // CREATE EDGE
-            // horizontal: [r][c + weight.col + 1]
-            if (u.second + w.second + 1 < cols && maze_data[u.first][u.second + w.second + 1] == 0) {
-                graph.edges.push_back({u, {u.first, u.second + w.second + 1}, w.second + 1}); // w only (on 3rd param) without +1 means adjacent vertex will weigh 0
-            }
-
-            // vertical: [r + weight.row + 1][c]
-            if (u.first + w.first + 1 < rows && maze_data[u.first + w.first + 1][u.second] == 0) {
-                graph.edges.push_back({u, {u.first + w.first + 1, u.second}, w.first + 1}); // this too
-            }
-            graph.vertices.push_back(u);
-            ++vertices;
-        }
-    }
-    graph.V = vertices;
     graph.E = graph.edges.size();
 
     return graph;
@@ -126,7 +105,7 @@ Graph buildGraph (const vector<vector<bool>>& maze_data) {
 
 int main () {   
     vector<vector<bool>> maze = {
-        {1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
         {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
         {1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
         {1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
@@ -150,7 +129,7 @@ int main () {
         {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
         {1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
         {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
-        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     };
 
     for (const auto& row : maze) {
