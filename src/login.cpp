@@ -4,9 +4,19 @@
 #include <regex>
 #include <sstream>
 #include "../include/welcome_press_any_key.h" 
+#include "../include/clear_screen.h"
 
 using namespace std;
 
+
+string toLower(const string &str)
+{
+    string lowerStr = str;
+    for (char &c : lowerStr) {
+        c = tolower(c);
+    }
+    return lowerStr;
+}
 
 //Format username minimal 8 karakter dan tidak kosong
 bool validationUsername(const string& username)
@@ -104,7 +114,14 @@ bool checkingUsername(const string& usernameToCheck) {
         if (username == usernameToCheck) {
             return true; 
         }
+
+        if (toLower(username) == toLower(usernameToCheck))
+        {
+            return true;
+        }
     }
+
+    
 
     return false; 
 }
@@ -131,6 +148,20 @@ void registerUser(const string& username, const string& password)
     cout << "Registrasi Sukses! Silahkan Login  " << endl; 
 };
 
+//fungsi untuk membuat login session
+
+void createLoginSession(const string& username)
+{
+    ofstream sessionFile("database/loginSession.txt");
+    if (!sessionFile.is_open())
+    {
+        cout << "Database login session tidak dapat dibuka" << endl;
+        return;
+    }
+
+    sessionFile << username << endl; 
+};
+
 void menuLoginorRegister()
 {
     cout << "Sebelum bermain, silahkan login atau register terlebih dahulu:  " << endl;
@@ -148,6 +179,7 @@ int main()
     animateText(messages1, 75);
     animateText(author, 75);
     blinkTextUntilKeyPress(messages3, 400);
+    clearScreen();
 
     string username, password, input;
     while (true)
@@ -187,6 +219,7 @@ int main()
 
                 if (login(username, password))
                 {
+                    createLoginSession(username);
                     return 0;
                 } else 
                 {
