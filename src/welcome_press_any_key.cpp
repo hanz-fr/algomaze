@@ -61,17 +61,3 @@ void blinkTextUntilKeyPress(const std::string& text, unsigned int blink_delay_ms
     printColoredText(text, colors[colorIndex]);
     std::cout << std::endl;
 }
-
-//int main() {
-//    std::string message = "Welcome to the Algorithm Maze Game!";
-//    std::string author = "Made by group 4";
-//    std::string message2 = "Press any key to continue...";
-//
-//    // Animate the message with rainbow colors
-//    animateText(message, 75);
-//    animateText(author, 75);
-//    // Blink the message in cycling colors until key press
-//    blinkTextUntilKeyPress(message2, 400);
-//
-//    return 0;
-//}
