@@ -9,10 +9,23 @@
 #include "../include/player_pos.h"
 #include "../include/vector_to_graph.h"
 #include "../include/maze_completed.h"
+#include "../include/welcome_press_any_key.h"
+#include "../include/login.h"
 
 int main()
 {
     int c = 0;
+
+    std::string welcome_message = "Welcome to the Algorithm Maze Game!";
+    std::string author = "Made by group 4";
+    std::string press_key_to_continue = "Press any key to continue...";
+
+    animateText(welcome_message, 75);
+    animateText(author, 75);
+    blinkTextUntilKeyPress(press_key_to_continue, 400);
+    
+    // initiate login/register menu
+    menuLoginorRegister();
 
     // player starting position
     int player_row_pos = 0;
@@ -28,12 +41,6 @@ int main()
     // initial render of player and maze
     showPlayerPos(player_row_pos, player_col_pos);
     renderMaze(player_row_pos, player_col_pos, maze);
-
-    // player outside maze boundary
-    if (player_col_pos >= maze.size() || player_row_pos >= maze[0].size() || !maze[player_col_pos][player_row_pos])
-    {
-        std::cerr << "Error: Posisi pemain di luar batas labirin." << std::endl;
-    }
 
     while (true)
     {
@@ -68,7 +75,7 @@ int main()
 
                 // only render when move is valid
                 // show congrats when maze completed
-                if (isCompleted(player_row_pos, player_col_pos, maze_exit_row, maze_exit_col))
+                if (isCompleted(player_row_pos, player_col_pos, maze))
                 {
                     clearScreen();
                     int inp;

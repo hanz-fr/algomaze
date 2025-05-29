@@ -8,9 +8,10 @@
 
 bool isPlayerMoveValid(int new_row, int new_col, const std::vector<std::vector<bool>> &maze)
 {
-    if (new_col < 0 || new_col >= maze.size()) // X axis
-        return false;
-    if (new_row < 0 || new_row >= maze[0].size()) // Y axis
-        return false;                   
-    return maze[new_row][new_col] == 0; 
+    if (new_row >= 0 && new_row < maze.size() && new_col >= 0 && new_col < maze[0].size())
+    {
+        return maze[new_row][new_col] == 0; // check if wall or not, return true (valid) if not a wall
+    }
+    return true; // outside boundary will be checked by isCompleted()
+    
 };
