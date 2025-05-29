@@ -6,7 +6,7 @@
 
 
 #include "../include/player_movement.h"
-#include "../include/keyinp.h" .
+#include "../include/keyinp.h"
 #include "../include/clear_screen.h"
 #include "../include/render_maze.h"
 #include "../include/maze.h"
