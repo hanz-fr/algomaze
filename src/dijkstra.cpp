@@ -44,13 +44,13 @@ std::vector<int> findShortestPathDijkstra(
         if (u == end_node_id) {
             std::vector<int> path;
             int current = end_node_id;
+
             // Rekonstruksi path dari end_node_id ke start_node_id
             while (current != -1 && current != start_node_id) {
                 path.push_back(current);
                 // Pastikan current ada di previous_nodes sebelum diakses
                 if (previous_nodes.find(current) == previous_nodes.end()){
-                     // Seharusnya tidak terjadi jika path ditemukan dengan benar
-                    return {}; // Gagal merekonstruksi path
+                    return {}; 
                 }
                 current = previous_nodes[current];
             }
@@ -61,12 +61,11 @@ std::vector<int> findShortestPathDijkstra(
             if (!path.empty() && path.front() == start_node_id) {
                  return path;
             } else {
-                 return {}; // Path tidak valid
+                 return {};
             }
         }
 
         // Iterasi semua tetangga v dari u
-        // Pastikan u ada di graph dan memiliki tetangga (graph.count(u) > 0)
         if (graph.count(u)) {
             for (int v : graph.at(u)) {
                 // Asumsi bobot setiap edge adalah 1 (bergerak ke sel tetangga)
