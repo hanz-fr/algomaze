@@ -23,6 +23,7 @@ int main()
     animateText(welcome_message, 75);
     animateText(author, 75);
     blinkTextUntilKeyPress(press_key_to_continue, 400);
+    clearScreen();
     
     // initiate login/register menu
     menuLoginorRegister();

@@ -195,13 +195,16 @@ void menuLoginorRegister()
                 if (validationUsername(username) && validationPassword(password))
                 {
                     registerUser(username, password);
-                    break;
+                    break; 
                 }
             }
         }
         else if (input == "1")
         {
-            while (true)
+            int attempts = 0;
+            const int maxAttempts = 3;
+
+            while (attempts < maxAttempts)
             {
                 std::cout << "=== Login ===" << std::endl;
                 std::cout << "Masukkan username: ";
@@ -213,13 +216,24 @@ void menuLoginorRegister()
                 if (login(username, password))
                 {
                     createLoginSession(username);
-                    return;
+                    return; 
                 }
                 else
                 {
-                    std::cout << "Login gagal! Username atau password salah. Silahkan coba lagi." << std::endl;
+                    attempts++;
+                    int remaining = maxAttempts - attempts;
+                    std::cout << "Login gagal! username atau password salah." << std::endl;
+
+                    if (remaining > 0)
+                    {
+                        std::cout << "Sisa percobaan login: " << remaining << std::endl;
+                    }
                 }
             }
+
+            // batas kesempatan login
+            std::cout << "Anda telah melebihi batas percobaan login.\n" << std::endl;
+            continue; 
         }
         else
         {
