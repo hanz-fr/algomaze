@@ -8,7 +8,7 @@
 #include "../include/player_movement.h"
 #include "../include/keyinp.h"
 #include "../include/clear_screen.h"
-#include "../include/render_maze.h"
+#include "../include/render_dijkstra_path.h"
 #include "../include/maze.h"
 #include "../include/player_pos.h"
 #include "../include/vector_to_graph.h"
@@ -68,7 +68,7 @@ int main()
 
     // Render awal pemain dan maze 
     showPlayerPos(player_row_pos, player_col_pos); 
-    renderMaze(player_row_pos, player_col_pos, maze, shortest_path, num_cols);
+    renderDijkstraPath(player_row_pos, player_col_pos, maze, shortest_path, num_cols);
 
    
     while (true)
@@ -100,7 +100,7 @@ int main()
                 {
                     // Langkah 1: menampilkan keadaan menang terakhir kali.
                     showPlayerPos(player_row_pos, player_col_pos); 
-                    renderMaze(player_row_pos, player_col_pos, maze, shortest_path, num_cols);
+                    renderDijkstraPath(player_row_pos, player_col_pos, maze, shortest_path, num_cols);
 
                     // Langkah 2: Tampilkan pesan kemenangan & hadiah di layar yang sama, lalu tunggu input.
                     std::cout << "\n\nSelamat anda telah menyelesaikan labirin ini! \n";
@@ -129,7 +129,7 @@ int main()
                         player_col_pos = 1;
 
                         showPlayerPos(player_row_pos, player_col_pos);
-                        renderMaze(player_row_pos, player_col_pos, maze, shortest_path, num_cols);
+                        renderDijkstraPath(player_row_pos, player_col_pos, maze, shortest_path, num_cols);
                     }
                     else if (inp == 2)
                     {
@@ -146,7 +146,7 @@ int main()
                 else // Jika belum menang, render maze seperti biasa.
                 {
                     showPlayerPos(player_row_pos, player_col_pos);
-                    renderMaze(player_row_pos, player_col_pos, maze, shortest_path, num_cols);
+                    renderDijkstraPath(player_row_pos, player_col_pos, maze, shortest_path, num_cols);
                 }
             }
             
