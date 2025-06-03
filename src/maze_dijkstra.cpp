@@ -4,7 +4,6 @@
 #include <conio.h> 
 #include <limits> 
 
-
 #include "../include/player_movement.h"
 #include "../include/keyinp.h"
 #include "../include/clear_screen.h"
@@ -13,7 +12,6 @@
 #include "../include/player_pos.h"
 #include "../include/vector_to_graph.h"
 #include "../include/dijkstra.h"
-
 
 int main()
 {
