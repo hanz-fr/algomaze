@@ -170,7 +170,7 @@ void createLoginSession(const string &username)
 
 void menuLoginorRegister()
 {
-    std::string username, password, input;
+    string username, password, input;
 
     cout << "Sebelum bermain, silahkan login atau register terlebih dahulu:  " << endl;
     cout << "1. Login" << endl;
@@ -178,19 +178,19 @@ void menuLoginorRegister()
 
     while (true)
     {
-        std::cout << "Masukkan pilihan (1 atau 2): ";
-        std::cin >> input;
+        cout << "Masukkan pilihan (1 atau 2): ";
+        cin >> input;
 
         if (input == "2")
         {
             while (true)
             {
-                std::cout << "=== Register ===" << std::endl;
-                std::cout << "Masukkan username: ";
-                std::cin >> username;
+                cout << "=== Register ===" << endl;
+                cout << "Masukkan username: ";
+                cin >> username;
 
-                std::cout << "Masukkan password (dengan ketentuan minimal 8 karakter, 1 Huruf besar, 1 huruf kecil, 1 angka, dan 1 simbol): ";
-                std::cin >> password;
+                cout << "Masukkan password (dengan ketentuan minimal 8 karakter, 1 Huruf besar, 1 huruf kecil, 1 angka, dan 1 simbol): ";
+                cin >> password;
 
                 if (validationUsername(username) && validationPassword(password))
                 {
@@ -206,12 +206,12 @@ void menuLoginorRegister()
 
             while (attempts < maxAttempts)
             {
-                std::cout << "=== Login ===" << std::endl;
-                std::cout << "Masukkan username: ";
-                std::cin >> username;
+                cout << "=== Login ===" << endl;
+                cout << "Masukkan username: ";
+                cin >> username;
 
-                std::cout << "Masukkan password: ";
-                std::cin >> password;
+                cout << "Masukkan password: ";
+                cin >> password;
 
                 if (login(username, password))
                 {
@@ -222,22 +222,22 @@ void menuLoginorRegister()
                 {
                     attempts++;
                     int remaining = maxAttempts - attempts;
-                    std::cout << "Login gagal! username atau password salah." << std::endl;
+                    cout << "Login gagal! username atau password salah." << endl;
 
                     if (remaining > 0)
                     {
-                        std::cout << "Sisa percobaan login: " << remaining << std::endl;
+                        cout << "Sisa percobaan login: " << remaining << endl;
                     }
                 }
             }
 
             // batas kesempatan login
-            std::cout << "Anda telah melebihi batas percobaan login.\n" << std::endl;
+            cout << "Anda telah melebihi batas percobaan login.\n" << endl;
             continue; 
         }
         else
         {
-            std::cout << "Pilihan tidak valid. Silakan masukkan 1 atau 2." << std::endl;
+            cout << "Pilihan tidak valid. Silakan masukkan 1 atau 2." << endl;
             continue;
         }
     }
