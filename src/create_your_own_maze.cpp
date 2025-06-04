@@ -1,6 +1,9 @@
 #include <string>
+#include <vector>
+#include <algorithm>
 
 #include "../include/empty_maze.h"
+#include "../include/maze_storage_queue.h"
 
 #include "../imgui/imgui.h"
 #include "../imgui/backends/imgui_impl_sdl2.h"
@@ -11,6 +14,9 @@
 
 int main(int, char **)
 {
+    /* MAZE STORAGE QUEUE INITIALIZATION */
+    createStorageQueue();
+
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *window = SDL_CreateWindow("Algomaze", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL);
     SDL_GLContext gl_context = SDL_GL_CreateContext(window);
@@ -25,6 +31,8 @@ int main(int, char **)
     ImGui_ImplOpenGL3_Init("#version 130");
 
     bool show = true;
+    std::string message_result = "";
+
     while (show)
     {
         SDL_Event event;
@@ -39,29 +47,63 @@ int main(int, char **)
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
         ImGui::Begin("##");
-        
+
         /* MAZE DRAW REGION */
-        const int rows = 25;
-        const int cols = 25;
+        const int max_rows = 100;
+        const int max_cols = 100;
 
         static int row_size_input = 0;
         static int col_size_input = 0;
+
+        static int last_row = row_size_input;
+        static int last_col = col_size_input;
+
+        // batesin input dari 1 sampe max baris/kolomnya
         ImGui::InputInt("Row Size", &row_size_input);
         ImGui::InputInt("Column Size", &col_size_input);
-        ImGui::Button("Save Maze");
-        
+        row_size_input = std::clamp(row_size_input, 1, max_rows);
+        col_size_input = std::clamp(col_size_input, 1, max_cols);
+
+        static std::vector<std::vector<bool>> maze(row_size_input, std::vector<bool>(col_size_input, false));
+
+        if (ImGui::Button("Save maze"))
+        {
+            message_result = insertToStorageQueue(maze);
+            ImGui::OpenPopup("Message");
+        }
+
+        // popup modal abis save maze ke storage queue
+        if (ImGui::BeginPopupModal("Message", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+        {
+            ImGui::Text(message_result.c_str());
+            if (ImGui::Button("OK"))
+                ImGui::CloseCurrentPopup();
+            ImGui::EndPopup();
+        }
+
+        // Resize maze if input changed
+        if (row_size_input != last_row || col_size_input != last_col)
+        {
+            maze.resize(row_size_input);
+            for (int i = 0; i < row_size_input; ++i)
+            {
+                maze[i].resize(col_size_input, false);
+            }
+            last_row = row_size_input;
+            last_col = col_size_input;
+        }
+
         ImGui::Text("Draw your own maze!");
         ImGui::Text("Size: %dx%d", row_size_input, col_size_input);
-        
-        static bool maze[rows][cols] = {false}; // true = wall
-        float cellSize = 15.0f; // seberapa gede kotak2nya
+
+        float cellSize = 15.0f;
+
         for (int i = 0; i < row_size_input; i++)
         {
             for (int j = 0; j < col_size_input; j++)
             {
                 ImGui::PushID(i * col_size_input + j);
 
-                // Set button color based on wall/path
                 ImGui::PushStyleColor(ImGuiCol_Button, maze[i][j] ? ImVec4(0.2f, 0.2f, 0.2f, 1.0f) : ImVec4(1, 1, 1, 1));
                 ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
                 ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
