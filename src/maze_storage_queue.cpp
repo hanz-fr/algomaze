@@ -42,6 +42,11 @@ void displayStorageQueue()
     }
 }
 
+int storageQueueSizeLeft()
+{
+    return storage_size - q.top;
+}
+
 std::string insertToStorageQueue(std::vector<std::vector<bool>> maze_data)
 {
     std::string message = "";

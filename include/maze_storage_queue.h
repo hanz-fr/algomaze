@@ -5,6 +5,7 @@
 
 void createStorageQueue();
 void displayStorageQueue();
+int storageQueueSizeLeft();
 std::string insertToStorageQueue(std::vector<std::vector<bool>> maze_data);
 void deleteFromStorageQueue();
 

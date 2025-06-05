@@ -66,16 +66,37 @@ int main(int, char **)
 
         static std::vector<std::vector<bool>> maze(row_size_input, std::vector<bool>(col_size_input, false));
 
+        /* Simpen maze ke storage queue */
         if (ImGui::Button("Save maze"))
         {
             message_result = insertToStorageQueue(maze);
             ImGui::OpenPopup("Message");
         }
+        ImGui::SameLine();
+
+        /* Lihat maze yang udah disimpen */
+        if (ImGui::Button("View saved maze"))
+        {
+            ImGui::OpenPopup("Saved Maze");
+        }
+        ImGui::SameLine();
+
+        int storageLeft = storageQueueSizeLeft();
+        ImGui::Text("Storage Queue Left: %d", storageLeft);
 
         // popup modal abis save maze ke storage queue
         if (ImGui::BeginPopupModal("Message", NULL, ImGuiWindowFlags_AlwaysAutoResize))
         {
             ImGui::Text(message_result.c_str());
+            if (ImGui::Button("OK"))
+                ImGui::CloseCurrentPopup();
+            ImGui::EndPopup();
+        }
+
+        // popup modal liat maze yang udah di save ke storage queue
+        if (ImGui::BeginPopupModal("Saved Maze", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+        {
+            ImGui::Text("Test");
             if (ImGui::Button("OK"))
                 ImGui::CloseCurrentPopup();
             ImGui::EndPopup();
