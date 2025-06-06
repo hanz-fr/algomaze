@@ -59,10 +59,29 @@ int main(int, char **)
         static int last_col = col_size_input;
 
         // batesin input dari 1 sampe max baris/kolomnya
+        ImGui::BeginChild("HeaderContainer", ImVec2(0, 150), true);
         ImGui::InputInt("Row Size", &row_size_input);
         ImGui::InputInt("Column Size", &col_size_input);
         row_size_input = std::clamp(row_size_input, 1, max_rows);
         col_size_input = std::clamp(col_size_input, 1, max_cols);
+
+        // visualisasi storage queue sisa berapa lagi
+        int storageLeft = storageQueueSizeLeft();
+
+        /* buat warna */
+        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.2f, 0.6f, 0.8f, 1.0f));        // normal
+        ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.3f, 0.7f, 0.9f, 1.0f)); // hovered
+        ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.1f, 0.5f, 0.7f, 1.0f));  // clicked
+
+        ImGui::Text("Storage Queue Left: %d", storageLeft);
+        ImGui::Selectable("##StorageQueue1", false, 0, ImVec2(50, 50));
+        ImGui::SameLine();
+        ImGui::Selectable("##StorageQueue2", false, 0, ImVec2(50, 50));
+        ImGui::SameLine();
+        ImGui::Selectable("##StorageQueue3", false, 0, ImVec2(50, 50));
+
+        ImGui::PopStyleColor(3);
+        ImGui::EndChild();
 
         static std::vector<std::vector<bool>> maze(row_size_input, std::vector<bool>(col_size_input, false));
 
@@ -79,10 +98,6 @@ int main(int, char **)
         {
             ImGui::OpenPopup("Saved Maze");
         }
-        ImGui::SameLine();
-
-        int storageLeft = storageQueueSizeLeft();
-        ImGui::Text("Storage Queue Left: %d", storageLeft);
 
         // popup modal abis save maze ke storage queue
         if (ImGui::BeginPopupModal("Message", NULL, ImGuiWindowFlags_AlwaysAutoResize))
