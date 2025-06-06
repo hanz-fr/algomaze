@@ -65,22 +65,35 @@ int main(int, char **)
         row_size_input = std::clamp(row_size_input, 1, max_rows);
         col_size_input = std::clamp(col_size_input, 1, max_cols);
 
-        // visualisasi storage queue sisa berapa lagi
-        int storageLeft = storageQueueSizeLeft();
+        /* Visualisasi storage queue sisa berapa lagi */
+        int storage_left = storageQueueSizeLeft();
+        int used_storage = storage_size - storage_left;
 
-        /* buat warna */
+        /* buat warna kotak2 visualisasi */
+        /* VISUALISASI STORAGE YANG TERSISA */
         ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.2f, 0.6f, 0.8f, 1.0f));        // normal
         ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.3f, 0.7f, 0.9f, 1.0f)); // hovered
         ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.1f, 0.5f, 0.7f, 1.0f));  // clicked
-
-        ImGui::Text("Storage Queue Left: %d", storageLeft);
-        ImGui::Selectable("##StorageQueue1", false, 0, ImVec2(50, 50));
-        ImGui::SameLine();
-        ImGui::Selectable("##StorageQueue2", false, 0, ImVec2(50, 50));
-        ImGui::SameLine();
-        ImGui::Selectable("##StorageQueue3", false, 0, ImVec2(50, 50));
-
+        ImGui::Text("Storage Queue Left: %d", storage_left);
+        for (int i = 0; i < storage_left; i++)
+        {
+            std::string label = "##StorageQueueAvailable" + std::to_string(i);
+            ImGui::Selectable(label.c_str(), true, 0, ImVec2(25, 25));
+            ImGui::SameLine();
+        }
         ImGui::PopStyleColor(3);
+        /* VISUALISASI STORAGE YANG DIPAKE */
+        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.181f, 1.0f, 0.544f, 1.0f));  // normal
+        ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.350f, 1.0f, 0.637f, 1.0f)); // hovered
+        ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.000f, 0.920f, 0.407f, 1.0f));  // clicked
+        for (int i = 0; i < used_storage; i++)
+        {
+            std::string label = "##StorageQueueUsed" + std::to_string(i);
+            ImGui::Selectable(label.c_str(), true, 0, ImVec2(25, 25));
+            ImGui::SameLine();
+        }
+        ImGui::PopStyleColor(3);
+        
         ImGui::EndChild();
 
         static std::vector<std::vector<bool>> maze(row_size_input, std::vector<bool>(col_size_input, false));

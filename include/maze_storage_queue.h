@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 
+const int storage_size = 3;
+
 void createStorageQueue();
 void displayStorageQueue();
 int storageQueueSizeLeft();

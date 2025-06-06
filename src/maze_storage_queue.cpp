@@ -3,8 +3,6 @@
 #include <string>
 #include "../include/maze_storage_queue.h"
 
-const int storage_size = 3;
-
 struct storage_queue
 {
     int top;

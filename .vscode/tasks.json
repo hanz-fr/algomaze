@@ -6,7 +6,7 @@
       "type": "shell",
       "command": "g++",
       "args": [
-        "src/create_your_own_maze.cpp",
+        "src/draw_your_own_maze.cpp",
         "src/maze_storage_queue.cpp",
         "imgui/imgui.cpp",
         "imgui/imgui_draw.cpp",
