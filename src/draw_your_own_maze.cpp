@@ -59,11 +59,18 @@ int main(int, char **)
         static int last_col = col_size_input;
 
         // batesin input dari 1 sampe max baris/kolomnya
-        ImGui::BeginChild("HeaderContainer", ImVec2(0, 150), true);
+        ImGui::BeginChild("HeaderContainer", ImVec2(0, 120), true);
         ImGui::InputInt("Row Size", &row_size_input);
         ImGui::InputInt("Column Size", &col_size_input);
         row_size_input = std::clamp(row_size_input, 1, max_rows);
         col_size_input = std::clamp(col_size_input, 1, max_cols);
+
+        // spacing
+        ImGui::Spacing();
+        ImGui::Dummy(ImVec2(0.0f, 1.0f));
+        ImGui::Separator();
+        ImGui::Spacing();
+        ImGui::Dummy(ImVec2(0.0f, 1.0f));
 
         /* Visualisasi storage queue sisa berapa lagi */
         int storage_left = storageQueueSizeLeft();
