@@ -24,7 +24,7 @@ int main()
     animateText(author, 75);
     blinkTextUntilKeyPress(press_key_to_continue, 400);
     clearScreen();
-    
+
     // initiate login/register menu
     menuLoginorRegister();
 
@@ -123,3 +123,4 @@ int main()
 
     return 0;
 }
+
