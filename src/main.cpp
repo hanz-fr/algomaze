@@ -11,6 +11,7 @@
 #include "../include/maze_completed.h"
 #include "../include/welcome_press_any_key.h"
 #include "../include/login.h"
+#include "../include/menu.h"
 
 int main()
 {
@@ -27,6 +28,12 @@ int main()
 
     // initiate login/register menu
     menuLoginorRegister();
+
+    // initiate menu
+    if (mainMenu() == -1){
+        return 0;
+    }
+
 
     // player starting position
     int player_row_pos = 0;
@@ -102,7 +109,7 @@ int main()
                     else if (inp == 2)
                     {
                         std::cout << "Program telah selesai.";
-                        break;
+                        mainMenu();
                     }
                     else
                     {
