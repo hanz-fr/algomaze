@@ -11,8 +11,6 @@
 #include "../include/maze_completed.h"
 #include "../include/welcome_press_any_key.h"
 #include "../include/login.h"
-#include "../include/help_dijkstra.h"
-#include "../include/menu.h"
 
 int main()
 {
@@ -45,6 +43,8 @@ int main()
 
     std::vector<std::vector<bool>> maze = initiateMaze();          // first maze initialization
     std::map<int, std::vector<int>> maze_graph = buildGraph(maze); // convert to graph (adjacency matrix)
+
+    startTimer(); //mulai waktunya //perubahan
 
     // initial render of player and maze
     showPlayerPos(player_row_pos, player_col_pos);
@@ -92,6 +92,9 @@ int main()
                 if (isCompleted(player_row_pos, player_col_pos, maze))
                 {
                     clearScreen();
+
+                    double time = stopTimer(); //perubahan 
+                    std::cout << "Waktu penyelesaian: " << time << "detik";
                     int inp;
 
                     std::cout << "Selamat anda telah menyelesaikan labirin ini! \n";
