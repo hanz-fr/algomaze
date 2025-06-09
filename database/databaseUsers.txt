@@ -6,8 +6,4 @@ MaksudAnda|#MaksudAnda123
 Mahesa23|#Mahesa23
 rasyaganteng_|rasyaganteng
 Rasyamantap123_|rasyamantap123
-<<<<<<< HEAD
 admin|admin123
-=======
-kamuganteng|kamuganteng123
->>>>>>> 599d2dbabe78622659be565555e677dede5afc51

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <conio.h>
+#include <fstream>
 #include "../include/player_movement.h"
 #include "../include/keyinp.h"
 #include "../include/clear_screen.h"
@@ -14,6 +15,7 @@
 #include "../include/help_dijkstra.h"
 #include "../include/menu.h"
 #include "../include/timer.h"
+#include "../include/leaderboard.h"
 
 int main () {
     std::string welcome_message = "Welcome to the Algorithm Maze Game!";
@@ -98,13 +100,27 @@ int game ()
                     clearScreen();
 
                     double time = stopTimer(); //perubahan 
+                    std::string username;
+                    {
+                        std::ifstream sessionFile("database/loginSession.txt");
+                        if (sessionFile.is_open()) 
+                        {
+                            std::getline(sessionFile, username);
+                            sessionFile.close();
+                        } else {
+                            username = "Unknown";
+                        }
+                    }
+
+                    saveToLeaderboard(username, time);
                     std::cout << "Waktu penyelesaian: " << time << "detik";
                     int inp;
 
                     std::cout << "Selamat anda telah menyelesaikan labirin ini! \n";
                     std::cout << "Berikut hadiah untuk anda: 🎁 \n";
                     std::cout << "[1] Ulang \n";
-                    std::cout << "[2] Selesai \n";
+                    std::cout << "[2] Liat rangking \n";
+                    std::cout << "[3] Keluar \n";
                     std::cout << "> ";
                     std::cin >> inp;
 
@@ -116,13 +132,24 @@ int game ()
                         player_col_pos = 1;
 
                         clearScreen();
+                        startTimer();
                         showPlayerPos(player_row_pos, player_col_pos);
                         renderMaze(player_row_pos, player_col_pos, maze);
                     }
                     else if (inp == 2)
                     {
-                        std::cout << "Program telah selesai.";
+                        showLeaderboard();
+
+                        std::cout << "Tekan ENTER untuk kembali ke menu...";
+                        std::cin.ignore();
+                        std::cin.get();
                         mainMenu();
+                        return 0;
+                    }
+                    else if (inp == 3)
+                    {
+                        mainMenu();
+                        return 0;
                     }
                     else
                     {
