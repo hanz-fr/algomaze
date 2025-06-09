@@ -11,6 +11,7 @@
 #include "../include/maze_completed.h"
 #include "../include/welcome_press_any_key.h"
 #include "../include/login.h"
+#include "../include/help_dijkstra.h"
 
 int main()
 {
@@ -111,11 +112,16 @@ int main()
                         break;
                     }
                 }
+                else if ( c == 'h' || c == 'H')
+                {
+                    showHelpDijkstra(player_row_pos, player_col_pos, maze_exit_row, maze_exit_col, maze, maze_graph);
+                }
                 else
                 {
                     clearScreen();
                     showPlayerPos(player_row_pos, player_col_pos);
                     renderMaze(player_row_pos, player_col_pos, maze);
+                    std::cout << "\nButuh bantuan? Tekan H untuk meminta bantuan.\n";
                 }
             }
         }
