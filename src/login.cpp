@@ -20,28 +20,28 @@ string toLower(const string &str)
 }
 
 // Format username minimal 8 karakter dan tidak kosong
-//bool validationUsername(const string &username)
-//{
-//    if (username.length() < 4 || username.length() > 20)
-//    {
-//        cout << "Username harus memiliki minimal 4 karakter dan maksimal 40 " << endl;
-//        return false;
-//    }
-//    else if (username.empty())
-//    {
-//        cout << "Username tidak boleh kosong." << endl;
-//        return false;
-//    }
-//
-//    const regex pattern("^[a-zA-Z0-9_]+$"); // pattern yang isinya cuma huruf, angka dan underscore
-//    if (!regex_match(username, pattern))
-//    {
-//        cout << "Username hanya boleh berisi huruf, angka, dan underscore" << endl;
-//        return false;
-//    }
-//
-//    return true;
-//}
+bool validationUsername(const string &username)
+{
+    if (username.length() < 4 || username.length() > 20)
+    {
+        cout << "Username harus memiliki minimal 4 karakter dan maksimal 40 " << endl;
+        return false;
+    }
+    else if (username.empty())
+    {
+        cout << "Username tidak boleh kosong." << endl;
+        return false;
+    }
+
+    const regex pattern("^[a-zA-Z0-9_]+$"); // pattern yang isinya cuma huruf, angka dan underscore
+    if (!regex_match(username, pattern))
+    {
+        cout << "Username hanya boleh berisi huruf, angka, dan underscore" << endl;
+        return false;
+    }
+
+    return true;
+}
 
 //// Format password minimal 8 karakter, tidak kosong dan minimal mengandung 1 huruf besar, 1 huruf kecil dan simbol
 //
@@ -172,12 +172,13 @@ void menuLoginorRegister()
 {
     string username, password, input;
 
-    cout << "Sebelum bermain, silahkan login atau register terlebih dahulu:  " << endl;
-    cout << "1. Login" << endl;
-    cout << "2. Register" << endl;
+
 
     while (true)
     {
+        cout << "Sebelum bermain, silahkan login atau register terlebih dahulu:  " << endl;
+        cout << "1. Login" << endl;
+        cout << "2. Register" << endl;
         cout << "Masukkan pilihan (1 atau 2): ";
         cin >> input;
 
@@ -192,8 +193,11 @@ void menuLoginorRegister()
                 cout << "Masukkan password: ";
                 cin >> password;
 
-                registerUser(username, password);
-                break;
+                if (validationUsername(username))  
+                {
+                    registerUser(username, password);
+                    break;
+                }
 
                 
             }
