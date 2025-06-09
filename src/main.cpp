@@ -13,6 +13,7 @@
 #include "../include/login.h"
 #include "../include/help_dijkstra.h"
 #include "../include/menu.h"
+#include "../include/timer.h"
 
 int main()
 {
