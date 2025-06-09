@@ -5,6 +5,10 @@
 #include "../include/empty_maze.h"
 #include "../include/maze_storage_queue.h"
 
+#include "../include/widgets/save_maze_modal.h"
+#include "../include/widgets/view_maze_modal.h"
+#include "../include/widgets/delete_old_maze_modal.h"
+
 #include "../imgui/imgui.h"
 #include "../imgui/backends/imgui_impl_sdl2.h"
 #include "../imgui/backends/imgui_impl_opengl3.h"
@@ -31,7 +35,7 @@ int main(int, char **)
     ImGui_ImplOpenGL3_Init("#version 130");
 
     bool show = true;
-    std::string message_result = "";
+    std::string message_result;
 
     while (show)
     {
@@ -59,7 +63,7 @@ int main(int, char **)
         static int last_col = col_size_input;
 
         // batesin input dari 1 sampe max baris/kolomnya
-        ImGui::BeginChild("HeaderContainer", ImVec2(0, 120), true);
+        ImGui::BeginChild("HeaderContainer", ImVec2(0, 135), true);
         ImGui::InputInt("Row Size", &row_size_input);
         ImGui::InputInt("Column Size", &col_size_input);
         row_size_input = std::clamp(row_size_input, 1, max_rows);
@@ -78,9 +82,9 @@ int main(int, char **)
 
         /* buat warna kotak2 visualisasi */
         /* VISUALISASI STORAGE YANG TERSISA */
-        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.2f, 0.6f, 0.8f, 1.0f));        // normal
-        ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.3f, 0.7f, 0.9f, 1.0f)); // hovered
-        ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.1f, 0.5f, 0.7f, 1.0f));  // clicked
+        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.42f, 0.933f, 1.0f, 1.0f));        // normal
+        ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.0f, 0.933f, 1.0f, 1.0f)); // hovered
+        ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.627f, 0.933f, 1.0f, 1.0f));  // clicked
         ImGui::Text("Storage Queue Left: %d", storage_left);
         for (int i = 0; i < storage_left; i++)
         {
@@ -90,9 +94,9 @@ int main(int, char **)
         }
         ImGui::PopStyleColor(3);
         /* VISUALISASI STORAGE YANG DIPAKE */
-        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.181f, 1.0f, 0.544f, 1.0f));  // normal
-        ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.350f, 1.0f, 0.637f, 1.0f)); // hovered
-        ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.000f, 0.920f, 0.407f, 1.0f));  // clicked
+        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.0f, 0.745f, 0.8f, 1.0f));  // normal
+        ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.0f, 0.745f, 0.8f, 1.0f)); // hovered
+        ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.0f, 0.745f, 0.8f, 1.0f));  // clicked
         for (int i = 0; i < used_storage; i++)
         {
             std::string label = "##StorageQueueUsed" + std::to_string(i);
@@ -105,37 +109,9 @@ int main(int, char **)
 
         static std::vector<std::vector<bool>> maze(row_size_input, std::vector<bool>(col_size_input, false));
 
-        /* Simpen maze ke storage queue */
-        if (ImGui::Button("Save maze"))
-        {
-            message_result = insertToStorageQueue(maze);
-            ImGui::OpenPopup("Message");
-        }
-        ImGui::SameLine();
-
-        /* Lihat maze yang udah disimpen */
-        if (ImGui::Button("View saved maze"))
-        {
-            ImGui::OpenPopup("Saved Maze");
-        }
-
-        // popup modal abis save maze ke storage queue
-        if (ImGui::BeginPopupModal("Message", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-        {
-            ImGui::Text(message_result.c_str());
-            if (ImGui::Button("OK"))
-                ImGui::CloseCurrentPopup();
-            ImGui::EndPopup();
-        }
-
-        // popup modal liat maze yang udah di save ke storage queue
-        if (ImGui::BeginPopupModal("Saved Maze", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-        {
-            ImGui::Text("Test");
-            if (ImGui::Button("OK"))
-                ImGui::CloseCurrentPopup();
-            ImGui::EndPopup();
-        }
+        saveMazeModal(maze, message_result);
+        viewMazeModal();
+        deleteOldMazeModal(message_result);
 
         // Resize maze if input changed
         if (row_size_input != last_row || col_size_input != last_col)
@@ -176,38 +152,6 @@ int main(int, char **)
                     ImGui::SameLine();
             }
         }
-
-        /* TABLE */
-        // ImGui::BeginChild("TableRegion", ImVec2(100,100), true);
-        // const int col = 5;
-        // const int row = 5;
-        // bool checkboxes[col][col] = {};
-        // if (ImGui::BeginTable("table1", col, ImGuiTableFlags_Borders))
-        // {
-        //     for (int i = 0; i < row; i++)
-        //     {
-        //         ImGui::TableNextRow();
-        //         for (int j = 0; j < col; j++)
-        //         {
-        //             ImGui::TableSetColumnIndex(j);
-        //             std::string label = "##checkbox_" + std::to_string(i) + "_" + std::to_string(j);
-        //             ImGui::Checkbox(label.c_str(), &checkboxes[i][j]);
-        //         }
-        //     }
-        //     ImGui::EndTable();
-        // }
-        // ImGui::EndChild();
-
-        // if (ImGui::BeginTable("table3", 25))
-        // {
-        //     for (int item = 0; item < 25; item++)
-        //     {
-        //         ImGui::TableNextColumn();
-        //         std::string label = "##checkbox" + std::to_string(item);
-        //         ImGui::Checkbox(label.c_str(), &checkboxes[item]);
-        //     }
-        //     ImGui::EndTable();
-        // }
 
         if (ImGui::Button("Close"))
             show = false;

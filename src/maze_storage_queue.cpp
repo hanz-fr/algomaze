@@ -1,12 +1,13 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <array>
 #include "../include/maze_storage_queue.h"
 
 struct storage_queue
 {
     int top;
-    std::vector<std::vector<bool>> storage[storage_size];
+    std::array<std::vector<std::vector<bool>>, storage_size> storage;
 } q;
 
 void createStorageQueue()
@@ -24,25 +25,19 @@ bool isStorageQueueFull()
     return q.top >= storage_size;
 }
 
-void displayStorageQueue()
-{
-    if (isStorageQueueEmpty())
-    {
-        std::cout << "Storage queue is empty." << "\n";
-    }
-    else
-    {
-        std::cout << "Displaying list of maze (rows and cols size) inside storage queue: " << "\n";
-        for (int i = 0; i < storage_size; i++)
-        {
-            std::cout << q.storage[i].size() << "x" << q.storage[i][0].size() << "\n";
-        }
-    }
-}
-
 int storageQueueSizeLeft()
 {
     return storage_size - q.top;
+}
+
+int getCurrentTopQueue()
+{
+    return q.top;
+}
+
+std::array<std::vector<std::vector<bool>>, storage_size> &displayStorageQueue()
+{
+    return q.storage;
 }
 
 std::string insertToStorageQueue(std::vector<std::vector<bool>> maze_data)
@@ -66,31 +61,37 @@ std::string insertToStorageQueue(std::vector<std::vector<bool>> maze_data)
         std::cout << message << "\n";
         q.top++;
         return message;
-
-        // tambah q nya 1
-        q.top++;
-        return message;
     }
 }
 
-void deleteFromStorageQueue()
+std::string deleteFromStorageQueue()
 {
+    std::string message = "";
     if (isStorageQueueEmpty())
     {
-        std::cout << "Can't delete because queue is empty." << "\n";
+        message = "Can't delete old maze because storage queue is empty.";
+        std::cout << message << "\n";
+        return message;
     }
     else
     {
-        std::vector<std::vector<bool>> pop_maze = q.storage[0]; // keluarin maze yang didepan antrian
+        std::vector<std::vector<bool>> pop_maze = q.storage[0]; // ambil data maze yang paling depan, alias yang paling lama
 
         int pop_maze_row = pop_maze.size();
         int pop_maze_col = pop_maze[0].size();
 
-        std::cout << "Maze with " << pop_maze_row << "x" << pop_maze_col << " size has been removed from storage queue." << "\n";
-        for (int i = 0; i < storage_size; i++)
+        message = "Maze with " + std::to_string(pop_maze_row) + "x" + std::to_string(pop_maze_col) + " size has been removed from storage queue.";
+        std::cout << message << "\n";
+
+        // keluarin maze yang didepan itu, ini cuman ngegeser id aja
+        for (int i = 1; i < q.top; i++)
         {
             q.storage[i - 1] = q.storage[i];
         }
-        q.storage[storage_size - 1] = {};
+        q.storage[q.top - 1].clear(); // baris paling terakhir sekarang kosong
+
+        q.top--;
+
+        return message;
     }
 }
