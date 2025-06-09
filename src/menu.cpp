@@ -1,7 +1,9 @@
 #include <iostream>
 #include "../include/clear_screen.h"
 #include "../include/menu.h"
+#include "../include/main.h"
 #include "../include/login.h"
+#include "../include/welcome_press_any_key.h"
 
 using namespace std;
 
@@ -31,7 +33,8 @@ int mainMenu() {
             case 1:
                 cin.ignore();
                 clearScreen(); 
-                return true;
+                game();
+                break;
             case 2:
                 cin.ignore();
                 cout << "\nAnda telah logout dari Algomaze.\n";

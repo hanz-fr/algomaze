@@ -15,10 +15,7 @@
 #include "../include/menu.h"
 #include "../include/timer.h"
 
-int main()
-{
-    int c = 0;
-
+int main () {
     std::string welcome_message = "Welcome to the Algorithm Maze Game!";
     std::string author = "Made by group 4";
     std::string press_key_to_continue = "Press any key to continue...";
@@ -30,11 +27,14 @@ int main()
 
     // initiate login/register menu
     menuLoginorRegister();
+    mainMenu();
+    
+    return 0;
+}
 
-    // initiate menu
-    if (mainMenu() == -1){
-        return 0;
-    }
+int game ()
+{
+    int c = 0;
 
     // player starting position
     int player_row_pos = 0;
@@ -59,6 +59,7 @@ int main()
         
         if (c == 27 ) {
             std::cout << "ESC pressed, exiting...\n";
+            clearScreen();
             mainMenu();
             return 0;
         }
