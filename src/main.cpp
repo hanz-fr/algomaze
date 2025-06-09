@@ -11,6 +11,8 @@
 #include "../include/maze_completed.h"
 #include "../include/welcome_press_any_key.h"
 #include "../include/login.h"
+#include "../include/help_dijkstra.h"
+#include "../include/menu.h"
 
 int main()
 {
