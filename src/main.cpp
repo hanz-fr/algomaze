@@ -12,6 +12,7 @@
 #include "../include/welcome_press_any_key.h"
 #include "../include/login.h"
 #include "../include/help_dijkstra.h"
+#include "../include/menu.h"
 
 int main()
 {
@@ -29,12 +30,17 @@ int main()
     // initiate login/register menu
     menuLoginorRegister();
 
+    // initiate menu
+    if (mainMenu() == -1){
+        return 0;
+    }
+
     // player starting position
     int player_row_pos = 0;
     int player_col_pos = 1;
 
     // maze finish position
-    int maze_exit_row = 25;
+    int maze_exit_row = 24;
     int maze_exit_col = 16;
 
     std::vector<std::vector<bool>> maze = initiateMaze();          // first maze initialization
@@ -47,6 +53,12 @@ int main()
     while (true)
     {
         char c = getch();
+        
+        if (c == 27 ) {
+            std::cout << "ESC pressed, exiting...\n";
+            mainMenu();
+            return 0;
+        }
 
         if (c == 0 || c == -32)
         {
@@ -103,7 +115,7 @@ int main()
                     else if (inp == 2)
                     {
                         std::cout << "Program telah selesai.";
-                        break;
+                        mainMenu();
                     }
                     else
                     {
@@ -111,10 +123,6 @@ int main()
                         std::cout << "Memberhentikan program...\n";
                         break;
                     }
-                }
-                else if ( c == 'h' || c == 'H')
-                {
-                    showHelpDijkstra(player_row_pos, player_col_pos, maze_exit_row, maze_exit_col, maze, maze_graph);
                 }
                 else
                 {
@@ -124,6 +132,16 @@ int main()
                     std::cout << "\nButuh bantuan? Tekan H untuk meminta bantuan.\n";
                 }
             }
+        
+        }
+        else if ( c == 'h' || c == 'H')
+        {
+            showHelpDijkstra(player_row_pos, player_col_pos, maze_exit_row, maze_exit_col, maze, maze_graph);
+        }
+        else if (c == 'q' || c == 'Q')
+        {
+            std::cout << "Program telah selesai.\n";
+            break;
         }
     }
 
