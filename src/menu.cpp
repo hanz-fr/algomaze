@@ -1,55 +1,84 @@
 #include <iostream>
+
 #include "../include/clear_screen.h"
 #include "../include/menu.h"
 #include "../include/main.h"
 #include "../include/login.h"
 #include "../include/welcome_press_any_key.h"
+#include "../include/leaderboard.h"
 
 using namespace std;
 
-void showTitle() {
+void showTitle()
+{
     cout << "==============================" << endl;
     cout << "      WELCOME TO ALGOMAZE     " << endl;
     cout << "==============================" << endl;
 }
 
-void showMainMenu() {
+void showMainMenu()
+{
     cout << "1. Play Game\n";
-    cout << "2. Logout\n";
-    cout << "3. Quit\n";
+    cout << "2. Leaderboard\n";
+    cout << "3. Pilih Maze\n";
+    cout << "4. Gambar Maze\n";
+    cout << "5. Logout\n";
+    cout << "6. Quit\n";
 }
 
-
-int mainMenu() {
+int mainMenu()
+{
     int choice;
 
-    while (true) {     
-        clearScreen();    
-        showTitle();           
-        showMainMenu();       
+    while (true)
+    {
+        clearScreen();
+        showTitle();
+        showMainMenu();
         cin >> choice;
 
-        switch (choice) {
-            case 1:
-                cin.ignore();
-                clearScreen(); 
-                game();
-                break;
-            case 2:
-                cin.ignore();
-                cout << "\nAnda telah logout dari Algomaze.\n";
-                clearScreen();
-                menuLoginorRegister();
-                break;
-            case 3:
-                cout << "\nTerima kasih telah bermain Algomaze!\n";
-                return -1;
-            default:
-                cout << "\nPilihan tidak valid. Coba lagi.\n";
-                cout << "Tekan Enter untuk lanjut...";
-                cin.ignore();
-                cin.get();
-                break;
+        switch (choice)
+        {
+        case 1:
+            cin.ignore();
+            clearScreen();
+            game();
+            break;
+        case 2:
+            showLeaderboard();
+
+            std::cout << "Tekan ENTER untuk kembali ke menu...";
+            std::cin.ignore();
+            std::cin.get();
+            mainMenu();
+            return 0;
+        case 3:
+            cin.ignore();
+            cout << "\nAnda telah logout dari Algomaze.\n";
+            clearScreen();
+            menuLoginorRegister();
+            break;
+        case 4:
+            cin.ignore();
+            cout << "\nAnda telah logout dari Algomaze.\n";
+            clearScreen();
+            menuLoginorRegister();
+            break;
+        case 5:
+            cin.ignore();
+            cout << "\nAnda telah logout dari Algomaze.\n";
+            clearScreen();
+            menuLoginorRegister();
+            break;
+        case 6:
+            cout << "\nTerima kasih telah bermain Algomaze!\n";
+            return -1;
+        default:
+            cout << "\nPilihan tidak valid. Coba lagi.\n";
+            cout << "Tekan Enter untuk lanjut...";
+            cin.ignore();
+            cin.get();
+            break;
         }
     }
 

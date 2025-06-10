@@ -130,6 +130,7 @@ int main(int, char **)
 
         float cellSize = 15.0f;
 
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 1)); // spacing antara sel maze
         for (int i = 0; i < row_size_input; i++)
         {
             for (int j = 0; j < col_size_input; j++)
@@ -152,8 +153,9 @@ int main(int, char **)
                     ImGui::SameLine();
             }
         }
+        ImGui::PopStyleVar();
 
-        if (ImGui::Button("Close"))
+        if (ImGui::Button("Exit GUI"))
             show = false;
         ImGui::End();
 
