@@ -16,6 +16,8 @@
 #include "../include/menu.h"
 #include "../include/timer.h"
 #include "../include/leaderboard.h"
+#include "../include/select_maze.h"
+#include "../include/read_maze_from_db.h"
 
 int main () {
     std::string welcome_message = "Welcome to the Algorithm Maze Game!";
@@ -38,16 +40,49 @@ int game ()
 {
     int c = 0;
 
-    // player starting position
-    int player_row_pos = 0;
-    int player_col_pos = 1;
+    // declare player starting position
+    int player_row_pos;
+    int player_col_pos;
 
-    // maze finish position
-    int maze_exit_row = 24;
-    int maze_exit_col = 16;
+    // declare maze finish position
+    int maze_exit_row;
+    int maze_exit_col;
 
-    std::vector<std::vector<bool>> maze = initiateMaze();          // first maze initialization
-    std::map<int, std::vector<int>> maze_graph = buildGraph(maze); // convert to graph (adjacency matrix)
+    // declare maze
+    std::vector<std::vector<bool>> maze;
+
+    // dapetin maze yang saat ini sedang dipilih
+    int currentMazeIndex = viewCurrentSelectedMaze("database/currentMaze.txt");
+    
+    /* Kondisi kalau maze yang dipilih itu default */
+    if (currentMazeIndex == -1)
+    {
+        player_row_pos = 0;
+        player_col_pos = 1;
+
+        maze_exit_row = 24;
+        maze_exit_col = 16;
+
+        maze = initiateMaze();
+    }
+    /* Kondisi kalau maze yang dipilih itu maze custom */
+    else
+    {
+        auto [start, end] = getCurrentMazeStartAndFinish("database/maze.txt", currentMazeIndex);
+        std::cout << "Start: (" << start.first << "," << start.second << ")\n";
+        std::cout << "End: (" << end.first << "," << end.second << ")\n";
+
+        player_row_pos = start.first; // titik baris start
+        player_col_pos = start.second; // titik kolom start
+
+        maze_exit_row = end.first; // titik baris finish
+        maze_exit_col = end.second; // titik kolom finish
+
+        maze = readMazeFromDB("database/maze.txt", currentMazeIndex);
+    }
+
+     // convert to graph (adjacency matrix)
+     std::map<int, std::vector<int>> maze_graph = buildGraph(maze);
 
     startTimer(); //mulai waktunya //perubahan
 

@@ -48,7 +48,7 @@ int main(int, char **)
         std::vector<std::vector<bool>> default_maze = initiateMaze();
 
         // LOOPING MAZE YANG DEFAULT
-        ImGui::RadioButton("Default", &selected, 0);
+        ImGui::RadioButton("Default", &selected, -1);
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 1)); // spacing antara sel maze
         for (int i = 0; i < default_maze.size(); i++)
         {

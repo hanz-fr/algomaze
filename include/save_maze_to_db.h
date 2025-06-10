@@ -3,6 +3,6 @@
 #include <vector>
 #include <string>
 
-void saveMazeToDB(const std::vector<std::vector<bool>>& maze, const std::string& filename);
+void saveMazeToDB(const std::vector<std::vector<bool>> &maze, const std::string &filename, const std::pair<int, int> &startPos, const std::pair<int, int> &endPos);
 
 #endif

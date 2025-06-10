@@ -3,7 +3,12 @@
 #include <vector>
 #include "../include/save_maze_to_db.h"
 
-void saveMazeToDB(const std::vector<std::vector<bool>>& maze, const std::string& filename) {
+void saveMazeToDB(
+    const std::vector<std::vector<bool>>& maze,
+    const std::string& filename,
+    const std::pair<int, int>& startPos,
+    const std::pair<int, int>& endPos
+) {
     std::ofstream file(filename, std::ios::app);
     if (!file) {
         std::cerr << "Gagal membuka penyimpanan maze.\n";
@@ -16,6 +21,9 @@ void saveMazeToDB(const std::vector<std::vector<bool>>& maze, const std::string&
         }
         file << '\n';
     }
+
+    file << "S:" << startPos.first << "," << startPos.second << '\n';
+    file << "E:" << endPos.first << "," << endPos.second << '\n';
 
     file << "---\n"; // delimiter buat batesin antara maze
 

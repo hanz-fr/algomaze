@@ -83,8 +83,8 @@ int main(int, char **)
         /* buat warna kotak2 visualisasi */
         /* VISUALISASI STORAGE YANG TERSISA */
         ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.42f, 0.933f, 1.0f, 1.0f));        // normal
-        ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.0f, 0.933f, 1.0f, 1.0f)); // hovered
-        ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.627f, 0.933f, 1.0f, 1.0f));  // clicked
+        ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.0f, 0.933f, 1.0f, 1.0f));  // hovered
+        ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.627f, 0.933f, 1.0f, 1.0f)); // clicked
         ImGui::Text("Storage Queue Left: %d", storage_left);
         for (int i = 0; i < storage_left; i++)
         {
@@ -94,7 +94,7 @@ int main(int, char **)
         }
         ImGui::PopStyleColor(3);
         /* VISUALISASI STORAGE YANG DIPAKE */
-        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.0f, 0.745f, 0.8f, 1.0f));  // normal
+        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.0f, 0.745f, 0.8f, 1.0f));        // normal
         ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.0f, 0.745f, 0.8f, 1.0f)); // hovered
         ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.0f, 0.745f, 0.8f, 1.0f));  // clicked
         for (int i = 0; i < used_storage; i++)
@@ -104,12 +104,26 @@ int main(int, char **)
             ImGui::SameLine();
         }
         ImGui::PopStyleColor(3);
-        
+
         ImGui::EndChild();
 
         static std::vector<std::vector<bool>> maze(row_size_input, std::vector<bool>(col_size_input, false));
 
-        saveMazeModal(maze, message_result);
+        static int row_starting_position = 0;
+        static int col_starting_postition = 0;
+
+        static int row_end_position = 0;
+        static int col_end_postition = 0;
+
+        ImGui::PushItemWidth(80.0f);  
+        ImGui::InputInt("Row Starting Position", &row_starting_position);
+        ImGui::InputInt("Column Starting Position", &col_starting_postition);
+        
+        ImGui::InputInt("Row End Position", &row_end_position);
+        ImGui::InputInt("Column End Position", &col_end_postition);
+        ImGui::PopItemWidth();
+
+        saveMazeModal(maze, message_result, {row_starting_position, col_starting_postition}, {row_end_position, col_end_postition});
         viewMazeModal();
         deleteOldMazeModal(message_result);
 
@@ -144,6 +158,11 @@ int main(int, char **)
                 if (ImGui::Button(" ", ImVec2(cellSize, cellSize)))
                 {
                     maze[i][j] = !maze[i][j];
+                }
+
+                if (ImGui::IsItemHovered())
+                {
+                    ImGui::SetTooltip("Cell (%d, %d): %s", i, j, maze[i][j] ? "Wall" : "Path");
                 }
 
                 ImGui::PopStyleColor(3);

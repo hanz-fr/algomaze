@@ -11,8 +11,10 @@
 using namespace std;
 
 std::filesystem::path cwd = std::filesystem::current_path(); // Get current working directory
-std::filesystem::path draw_maze_execute_command = cwd / "build" / "draw_maze.exe"; // command to execute draw maze
+std::filesystem::path draw_maze_execute_command = cwd / "build" / "draw_maze.exe"; // command to execute draw_maze
+std::filesystem::path choose_maze_execute_command = cwd / "build" / "choose_maze.exe"; // command to execute choose_maze
 std::string draw_maze_path = "\"" + draw_maze_execute_command.string() + "\"";
+std::string choose_maze_path = "\"" + choose_maze_execute_command.string() + "\"";
 
 void showTitle()
 {
@@ -57,7 +59,8 @@ int mainMenu()
             mainMenu();
             return 0;
         case 3:
-            
+            system(choose_maze_path.c_str());
+            mainMenu();
             break;
         case 4:
             system(draw_maze_path.c_str());

@@ -24,10 +24,15 @@ std::vector<std::vector<bool>> readMazeFromDB(const std::string &filename, size_
         {
             if (currentIndex == index)
             {
-                return currentMaze; // output maze indeks yg dicari
+                return currentMaze;
             }
-            currentMaze.clear(); // kalau gaada, reset, terus lanjut cari
+            currentMaze.clear();
             ++currentIndex;
+        }
+        else if (line.rfind("S:", 0) == 0 || line.rfind("E:", 0) == 0)
+        {
+            // abaikan baris start/end position
+            continue;
         }
         else
         {
@@ -43,12 +48,70 @@ std::vector<std::vector<bool>> readMazeFromDB(const std::string &filename, size_
         }
     }
 
-    // pengkondisian untuk maze terakhir karena gaada ---- (delimiter)
     if (currentIndex == index)
     {
         return currentMaze;
     }
 
-    std::cerr << "Indeks maze diluar jangkauan.\n";
+    std::cerr << "Indeks maze di luar jangkauan.\n";
     return {};
+}
+
+std::pair<std::pair<int, int>, std::pair<int, int>> getCurrentMazeStartAndFinish(const std::string& filename, size_t index)
+{
+    std::ifstream file(filename);
+    if (!file)
+    {
+        std::cerr << "Gagal membuka penyimpanan maze.\n";
+        return {{-1, -1}, {-1, -1}};
+    }
+
+    std::string line;
+    size_t currentIndex = 0;
+    std::pair<int, int> start = {-1, -1};
+    std::pair<int, int> end = {-1, -1};
+
+    bool insideTargetMaze = false;
+
+    while (std::getline(file, line))
+    {
+        if (line == "---")
+        {
+            if (insideTargetMaze)
+            {
+                break; // finished reading target maze
+            }
+
+            currentIndex++;
+            continue;
+        }
+
+        if (currentIndex == index)
+        {
+            insideTargetMaze = true;
+
+            if (line.rfind("S:", 0) == 0)
+            {
+                size_t comma = line.find(',');
+                if (comma != std::string::npos)
+                {
+                    int x = std::stoi(line.substr(2, comma - 2));
+                    int y = std::stoi(line.substr(comma + 1));
+                    start = {x, y};
+                }
+            }
+            else if (line.rfind("E:", 0) == 0)
+            {
+                size_t comma = line.find(',');
+                if (comma != std::string::npos)
+                {
+                    int x = std::stoi(line.substr(2, comma - 2));
+                    int y = std::stoi(line.substr(comma + 1));
+                    end = {x, y};
+                }
+            }
+        }
+    }
+
+    return {start, end};
 }

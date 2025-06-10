@@ -59,7 +59,7 @@ std::array<std::vector<std::vector<bool>>, storage_size> &displayStorageQueue()
     return q.storage;
 }
 
-std::string insertToStorageQueue(std::vector<std::vector<bool>> maze_data)
+std::string insertToStorageQueue(std::vector<std::vector<bool>> maze_data, const std::pair<int, int> &startPos, const std::pair<int, int> &endPos)
 {
     std::string message = "";
     int maze_data_row = maze_data.size();
@@ -74,7 +74,7 @@ std::string insertToStorageQueue(std::vector<std::vector<bool>> maze_data)
     else
     {
         q.storage[q.top] = maze_data; // masukkin maze yg baru ke dalem queue
-        saveMazeToDB(maze_data, "database/maze.txt"); // masukkin jg ke database
+        saveMazeToDB(maze_data, "database/maze.txt", startPos, endPos); // masukkin jg ke database
 
         // PESAN BERHASIL
         std::string message = "Maze dengan ukuran " + std::to_string(maze_data_row) + "x" + std::to_string(maze_data_col) + " berhasil disimpan ke dalam antrian penyimpanan.";
