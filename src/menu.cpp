@@ -58,10 +58,7 @@ int mainMenu()
             mainMenu();
             return 0;
         case 3:
-            cin.ignore();
-            cout << "\nAnda telah logout dari Algomaze.\n";
-            clearScreen();
-            menuLoginorRegister();
+            
             break;
         case 4:
             system(draw_maze_path.c_str());
