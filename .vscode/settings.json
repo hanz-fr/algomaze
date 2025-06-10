@@ -70,6 +70,8 @@
         "stop_token": "cpp",
         "deque": "cpp",
         "queue": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "array": "cpp",
+        "filesystem": "cpp"
     }
 }

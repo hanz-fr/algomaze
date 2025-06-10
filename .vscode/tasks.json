@@ -8,6 +8,13 @@
       "args": [
         "src/draw_your_own_maze.cpp",
         "src/maze_storage_queue.cpp",
+        "src/save_maze_to_db.cpp",
+        "src/read_maze_from_db.cpp",
+        "src/delete_oldest_maze_from_db.cpp",
+        "src/is_maze_db_empty.cpp",
+        "src/widgets/save_maze_modal.cpp",
+        "src/widgets/view_maze_modal.cpp",
+        "src/widgets/delete_old_maze_modal.cpp",
         "imgui/imgui.cpp",
         "imgui/imgui_draw.cpp",
         "imgui/imgui_tables.cpp",

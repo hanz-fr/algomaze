@@ -5,10 +5,12 @@
 
 const int storage_size = 3;
 
+bool isStorageQueueEmpty();
 void createStorageQueue();
-void displayStorageQueue();
 int storageQueueSizeLeft();
-std::string insertToStorageQueue(std::vector<std::vector<bool>> maze_data);
-void deleteFromStorageQueue();
+int getCurrentTopQueue();
+std::array<std::vector<std::vector<bool>>, storage_size> &displayStorageQueue();
+std::string insertToStorageQueue(std::vector<std::vector<bool>> maze_data, const std::pair<int, int> &startPos, const std::pair<int, int> &endPos);
+std::string deleteFromStorageQueue();
 
 #endif

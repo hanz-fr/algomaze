@@ -2,15 +2,9 @@
 #include <vector>
 #include "../include/maze.h"
 
-std::vector<std::vector<bool>> initiateMaze(int row_size, int col_size, int start_pos, int finish_pos)
+std::vector<std::vector<bool>> initiateMaze()
 {
-    for (int i = 0; i < row_size; i++)
-    {
-        for (int j = 0; j < col_size; j++)
-        {
-            
-        }
-    }
+   
 
 
     return {
@@ -44,7 +38,3 @@ std::vector<std::vector<bool>> initiateMaze(int row_size, int col_size, int star
     };
 }
 
-int main()
-{
-    initiateMaze();
-}

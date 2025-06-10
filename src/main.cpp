@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <conio.h>
+#include <fstream>
 #include "../include/player_movement.h"
 #include "../include/keyinp.h"
 #include "../include/clear_screen.h"
@@ -11,11 +12,14 @@
 #include "../include/maze_completed.h"
 #include "../include/welcome_press_any_key.h"
 #include "../include/login.h"
+#include "../include/help_dijkstra.h"
+#include "../include/menu.h"
+#include "../include/timer.h"
+#include "../include/leaderboard.h"
+#include "../include/select_maze.h"
+#include "../include/read_maze_from_db.h"
 
-int main()
-{
-    int c = 0;
-
+int main () {
     std::string welcome_message = "Welcome to the Algorithm Maze Game!";
     std::string author = "Made by group 4";
     std::string press_key_to_continue = "Press any key to continue...";
@@ -27,17 +31,60 @@ int main()
 
     // initiate login/register menu
     menuLoginorRegister();
+    mainMenu();
+    
+    return 0;
+}
 
-    // player starting position
-    int player_row_pos = 0;
-    int player_col_pos = 1;
+int game ()
+{
+    int c = 0;
 
-    // maze finish position
-    int maze_exit_row = 25;
-    int maze_exit_col = 16;
+    // declare player starting position
+    int player_row_pos;
+    int player_col_pos;
 
-    std::vector<std::vector<bool>> maze = initiateMaze();          // first maze initialization
-    std::map<int, std::vector<int>> maze_graph = buildGraph(maze); // convert to graph (adjacency matrix)
+    // declare maze finish position
+    int maze_exit_row;
+    int maze_exit_col;
+
+    // declare maze
+    std::vector<std::vector<bool>> maze;
+
+    // dapetin maze yang saat ini sedang dipilih
+    int currentMazeIndex = viewCurrentSelectedMaze("database/currentMaze.txt");
+    
+    /* Kondisi kalau maze yang dipilih itu default */
+    if (currentMazeIndex == -1)
+    {
+        player_row_pos = 0;
+        player_col_pos = 1;
+
+        maze_exit_row = 24;
+        maze_exit_col = 16;
+
+        maze = initiateMaze();
+    }
+    /* Kondisi kalau maze yang dipilih itu maze custom */
+    else
+    {
+        auto [start, end] = getCurrentMazeStartAndFinish("database/maze.txt", currentMazeIndex);
+        std::cout << "Start: (" << start.first << "," << start.second << ")\n";
+        std::cout << "End: (" << end.first << "," << end.second << ")\n";
+
+        player_row_pos = start.first; // titik baris start
+        player_col_pos = start.second; // titik kolom start
+
+        maze_exit_row = end.first; // titik baris finish
+        maze_exit_col = end.second; // titik kolom finish
+
+        maze = readMazeFromDB("database/maze.txt", currentMazeIndex);
+    }
+
+     // convert to graph (adjacency matrix)
+     std::map<int, std::vector<int>> maze_graph = buildGraph(maze);
+
+    startTimer(); //mulai waktunya //perubahan
 
     // initial render of player and maze
     showPlayerPos(player_row_pos, player_col_pos);
@@ -46,6 +93,13 @@ int main()
     while (true)
     {
         char c = getch();
+        
+        if (c == 27 ) {
+            std::cout << "ESC pressed, exiting...\n";
+            clearScreen();
+            mainMenu();
+            return 0;
+        }
 
         if (c == 0 || c == -32)
         {
@@ -79,12 +133,29 @@ int main()
                 if (isCompleted(player_row_pos, player_col_pos, maze))
                 {
                     clearScreen();
+
+                    double time = stopTimer(); //perubahan 
+                    std::string username;
+                    {
+                        std::ifstream sessionFile("database/loginSession.txt");
+                        if (sessionFile.is_open()) 
+                        {
+                            std::getline(sessionFile, username);
+                            sessionFile.close();
+                        } else {
+                            username = "Unknown";
+                        }
+                    }
+
+                    saveToLeaderboard(username, time);
+                    std::cout << "Waktu penyelesaian: " << time << "detik";
                     int inp;
 
                     std::cout << "Selamat anda telah menyelesaikan labirin ini! \n";
-                    std::cout << "Berikut hadiah untuk anda: 🎁 \n";
+                    std::cout << "Berikut hadiah untuk anda: \n";
                     std::cout << "[1] Ulang \n";
-                    std::cout << "[2] Selesai \n";
+                    std::cout << "[2] Liat rangking \n";
+                    std::cout << "[3] Keluar \n";
                     std::cout << "> ";
                     std::cin >> inp;
 
@@ -96,13 +167,24 @@ int main()
                         player_col_pos = 1;
 
                         clearScreen();
+                        startTimer();
                         showPlayerPos(player_row_pos, player_col_pos);
                         renderMaze(player_row_pos, player_col_pos, maze);
                     }
                     else if (inp == 2)
                     {
-                        std::cout << "Program telah selesai.";
-                        break;
+                        showLeaderboard();
+
+                        std::cout << "Tekan ENTER untuk kembali ke menu...";
+                        std::cin.ignore();
+                        std::cin.get();
+                        mainMenu();
+                        return 0;
+                    }
+                    else if (inp == 3)
+                    {
+                        mainMenu();
+                        return 0;
                     }
                     else
                     {
@@ -116,8 +198,19 @@ int main()
                     clearScreen();
                     showPlayerPos(player_row_pos, player_col_pos);
                     renderMaze(player_row_pos, player_col_pos, maze);
+                    std::cout << "\nButuh bantuan? Tekan H untuk meminta bantuan.\n";
                 }
             }
+        
+        }
+        else if ( c == 'h' || c == 'H')
+        {
+            showHelpDijkstra(player_row_pos, player_col_pos, maze_exit_row, maze_exit_col, maze, maze_graph);
+        }
+        else if (c == 'q' || c == 'Q')
+        {
+            std::cout << "Program telah selesai.\n";
+            break;
         }
     }
 
