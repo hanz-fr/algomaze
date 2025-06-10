@@ -117,7 +117,7 @@ int game ()
                     int inp;
 
                     std::cout << "Selamat anda telah menyelesaikan labirin ini! \n";
-                    std::cout << "Berikut hadiah untuk anda: 🎁 \n";
+                    std::cout << "Berikut hadiah untuk anda: \n";
                     std::cout << "[1] Ulang \n";
                     std::cout << "[2] Liat rangking \n";
                     std::cout << "[3] Keluar \n";

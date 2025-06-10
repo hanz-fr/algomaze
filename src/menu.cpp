@@ -29,6 +29,7 @@ void showMainMenu()
     cout << "4. Gambar Maze\n";
     cout << "5. Logout\n";
     cout << "6. Quit\n";
+    cout << "==============================\n\n";
 }
 
 int mainMenu()

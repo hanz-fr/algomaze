@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <iomanip>
+#include "../include/clear_screen.h"
 
 using namespace std;
 
@@ -38,10 +40,15 @@ void showLeaderboard() {
         return a.second < b.second;
     });
 
-    cout << "\n===== Leaderboard =====\n";
-    for (size_t i = 0; i < records.size(); ++i) 
+    clearScreen();
+    cout << "==============================" << endl;
+    cout << "          LEADERBOARD         " << endl;
+    cout << "==============================" << endl;
+    size_t topN = min(records.size(), size_t(5));
+
+    for (size_t i = 0; i < topN; ++i) 
     {
-        cout << i + 1 << ". " << records[i].first << " - " << records[i].second << " detik\n";
+        cout << i + 1 << ". " << records[i].first << " - " << fixed << setprecision(2) << records[i].second << " detik\n";
     }
-    cout << "========================\n\n";
+    cout << "==============================\n\n";
 }
