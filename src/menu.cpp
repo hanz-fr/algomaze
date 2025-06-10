@@ -1,5 +1,6 @@
 #include <iostream>
-
+#include <windows.h>
+#include <filesystem>
 #include "../include/clear_screen.h"
 #include "../include/menu.h"
 #include "../include/main.h"
@@ -8,6 +9,10 @@
 #include "../include/leaderboard.h"
 
 using namespace std;
+
+std::filesystem::path cwd = std::filesystem::current_path(); // Get current working directory
+std::filesystem::path draw_maze_execute_command = cwd / "build" / "draw_maze.exe"; // command to execute draw maze
+std::string draw_maze_path = "\"" + draw_maze_execute_command.string() + "\"";
 
 void showTitle()
 {
@@ -46,7 +51,6 @@ int mainMenu()
             break;
         case 2:
             showLeaderboard();
-
             std::cout << "Tekan ENTER untuk kembali ke menu...";
             std::cin.ignore();
             std::cin.get();
@@ -59,11 +63,9 @@ int mainMenu()
             menuLoginorRegister();
             break;
         case 4:
-            cin.ignore();
-            cout << "\nAnda telah logout dari Algomaze.\n";
-            clearScreen();
-            menuLoginorRegister();
-            break;
+            system(draw_maze_path.c_str());
+            mainMenu();
+            return 0;
         case 5:
             cin.ignore();
             cout << "\nAnda telah logout dari Algomaze.\n";

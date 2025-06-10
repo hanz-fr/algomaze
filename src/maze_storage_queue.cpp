@@ -67,7 +67,7 @@ std::string insertToStorageQueue(std::vector<std::vector<bool>> maze_data)
 
     if (isStorageQueueFull())
     {
-        message = "Can't add more maze because storage queue is full.\nConsider subscribing to get more storage.";
+        message = "Tidak dapat menyimpan maze lagi karena antrian penyimpanan sudah penuh.\nBerlangganan mulai Rp 50rb/bulan untuk mendapatkan penyimpanan lebih banyak.";
         std::cout << message << "\n";
         return message;
     }
@@ -77,7 +77,7 @@ std::string insertToStorageQueue(std::vector<std::vector<bool>> maze_data)
         saveMazeToDB(maze_data, "database/maze.txt"); // masukkin jg ke database
 
         // PESAN BERHASIL
-        std::string message = "Maze with " + std::to_string(maze_data_row) + "x" + std::to_string(maze_data_col) + " size has been added to storage queue.";
+        std::string message = "Maze dengan ukuran " + std::to_string(maze_data_row) + "x" + std::to_string(maze_data_col) + " berhasil disimpan ke dalam antrian penyimpanan.";
         std::cout << message << "\n";
         q.top++;
         return message;
@@ -89,7 +89,7 @@ std::string deleteFromStorageQueue()
     std::string message = "";
     if (isStorageQueueEmpty())
     {
-        message = "Can't delete old maze because storage queue is empty.";
+        message = "Tidak dapat menghapus karena antrian penyimpanan masih kosong.";
         std::cout << message << "\n";
         return message;
     }
@@ -100,7 +100,7 @@ std::string deleteFromStorageQueue()
         int pop_maze_row = pop_maze.size();
         int pop_maze_col = pop_maze[0].size();
 
-        message = "Maze with " + std::to_string(pop_maze_row) + "x" + std::to_string(pop_maze_col) + " size has been removed from storage queue.";
+        message = "Maze dengan ukuran " + std::to_string(pop_maze_row) + "x" + std::to_string(pop_maze_col) + " berhasil dihapus dari antrian penyimpanan.";
         std::cout << message << "\n";
 
         // keluarin maze yang didepan itu, ini cuman ngegeser id aja
