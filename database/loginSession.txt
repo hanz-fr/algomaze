@@ -1,5 +1,1 @@
-<<<<<<< HEAD
 admin
-=======
-kamuganteng
->>>>>>> 599d2dbabe78622659be565555e677dede5afc51
