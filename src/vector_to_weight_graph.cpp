@@ -16,7 +16,7 @@ struct Edge
 struct Graph
 {
     // vertices, edges
-    int V, E;;
+    int V, E;
     vector<pair<int, int>> vertices;
     vector<Edge> edges;
 };
