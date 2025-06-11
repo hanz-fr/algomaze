@@ -71,6 +71,7 @@
         "deque": "cpp",
         "queue": "cpp",
         "set": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "filesystem": "cpp"
     }
 }

@@ -3,6 +3,10 @@
 #include <string>
 #include <array>
 #include "../include/maze_storage_queue.h"
+#include "../include/save_maze_to_db.h"
+#include "../include/read_maze_from_db.h"
+#include "../include/delete_oldest_maze_from_db.h"
+#include "../include/is_maze_db_empty.h"
 
 struct storage_queue
 {
@@ -12,7 +16,22 @@ struct storage_queue
 
 void createStorageQueue()
 {
-    q.top = 0;
+    // cek ke db maze ada isinya atau nggak
+    if (mazeCount("database/maze.txt") <= 0)
+    {
+        q.top = 0;
+    }
+    else
+    {
+        // kalau ada isinya, sesuaiin q topnya
+        // terus masukkin semua maze yang ada di db ke storage queue
+        q.top = mazeCount("database/maze.txt");
+        for (int i = 0; i < q.top; i++)
+        {
+            std::vector<std::vector<bool>> maze = readMazeFromDB("database/maze.txt", i);
+            q.storage[i] = maze;
+        }
+    }
 }
 
 bool isStorageQueueEmpty()
@@ -40,7 +59,7 @@ std::array<std::vector<std::vector<bool>>, storage_size> &displayStorageQueue()
     return q.storage;
 }
 
-std::string insertToStorageQueue(std::vector<std::vector<bool>> maze_data)
+std::string insertToStorageQueue(std::vector<std::vector<bool>> maze_data, const std::pair<int, int> &startPos, const std::pair<int, int> &endPos)
 {
     std::string message = "";
     int maze_data_row = maze_data.size();
@@ -48,16 +67,17 @@ std::string insertToStorageQueue(std::vector<std::vector<bool>> maze_data)
 
     if (isStorageQueueFull())
     {
-        message = "Can't add more maze because storage queue is full.\nConsider subscribing to get more storage.";
+        message = "Tidak dapat menyimpan maze lagi karena antrian penyimpanan sudah penuh.\nBerlangganan mulai Rp 50rb/bulan untuk mendapatkan penyimpanan lebih banyak.";
         std::cout << message << "\n";
         return message;
     }
     else
     {
         q.storage[q.top] = maze_data; // masukkin maze yg baru ke dalem queue
+        saveMazeToDB(maze_data, "database/maze.txt", startPos, endPos); // masukkin jg ke database
 
         // PESAN BERHASIL
-        std::string message = "Maze with " + std::to_string(maze_data_row) + "x" + std::to_string(maze_data_col) + " size has been added to storage queue.";
+        std::string message = "Maze dengan ukuran " + std::to_string(maze_data_row) + "x" + std::to_string(maze_data_col) + " berhasil disimpan ke dalam antrian penyimpanan.";
         std::cout << message << "\n";
         q.top++;
         return message;
@@ -69,7 +89,7 @@ std::string deleteFromStorageQueue()
     std::string message = "";
     if (isStorageQueueEmpty())
     {
-        message = "Can't delete old maze because storage queue is empty.";
+        message = "Tidak dapat menghapus karena antrian penyimpanan masih kosong.";
         std::cout << message << "\n";
         return message;
     }
@@ -80,7 +100,7 @@ std::string deleteFromStorageQueue()
         int pop_maze_row = pop_maze.size();
         int pop_maze_col = pop_maze[0].size();
 
-        message = "Maze with " + std::to_string(pop_maze_row) + "x" + std::to_string(pop_maze_col) + " size has been removed from storage queue.";
+        message = "Maze dengan ukuran " + std::to_string(pop_maze_row) + "x" + std::to_string(pop_maze_col) + " berhasil dihapus dari antrian penyimpanan.";
         std::cout << message << "\n";
 
         // keluarin maze yang didepan itu, ini cuman ngegeser id aja
@@ -91,6 +111,8 @@ std::string deleteFromStorageQueue()
         q.storage[q.top - 1].clear(); // baris paling terakhir sekarang kosong
 
         q.top--;
+
+        deleteOldestMazeFromDB("database/maze.txt"); // hapus jg yang di database
 
         return message;
     }

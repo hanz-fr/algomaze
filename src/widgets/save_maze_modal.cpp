@@ -8,12 +8,12 @@
 #include "../sdl2/include/SDL2/SDL.h"
 #include "../sdl2/include/SDL2/SDL_opengl.h"
 
-void saveMazeModal(std::vector<std::vector<bool>> maze, std::string& message_result)
+void saveMazeModal(std::vector<std::vector<bool>> maze, std::string& message_result, const std::pair<int, int> &startPos, const std::pair<int, int> &endPos)
 {
     /* Simpen maze ke storage queue */
     if (ImGui::Button("Save maze"))
     {
-        message_result = insertToStorageQueue(maze);
+        message_result = insertToStorageQueue(maze, startPos, endPos);
         ImGui::OpenPopup("SaveMessage");
     }
     ImGui::SameLine();
