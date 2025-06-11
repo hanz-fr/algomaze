@@ -1,5 +1,1 @@
-<<<<<<< HEAD
 admin
-=======
-Mahesa23
->>>>>>> f8c41827a31668e5d4f18602bd6aff57db3faf1f
