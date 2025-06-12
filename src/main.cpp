@@ -148,7 +148,8 @@ int game ()
                     }
 
                     saveToLeaderboard(username, time);
-                    std::cout << "Waktu penyelesaian: " << time << "detik";
+                    std::cout << "Waktu penyelesaian: " << time << " detik" << std::endl;
+                    // std::cout << "Total gerakan: " << totalMoves() << std::endl;
                     int inp;
 
                     std::cout << "Selamat anda telah menyelesaikan labirin ini! \n";

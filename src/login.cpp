@@ -43,30 +43,6 @@ bool validationUsername(const string &username)
     return true;
 }
 
-//// Format password minimal 8 karakter, tidak kosong dan minimal mengandung 1 huruf besar, 1 huruf kecil dan simbol
-//
-//bool validationPassword(const string &password)
-//{
-//    if (password.length() < 8)
-//    {
-//        cout << "Password harus memiliki minimal 8 karakter. " << endl;
-//        return false;
-//    }
-//    else if (password.empty())
-//    {
-//        cout << "Password tidak boleh kosong." << endl;
-//        return false;
-//    }
-//
-//    regex pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).+$"); // pattern yang isinya minimal 1 huruf besar, 1 huruf kecil dan simbol
-//    if (!regex_match(password, pattern))
-//    {
-//        cout << "Password harus mengandung minimal 1 huruf besar, 1 huruf kecil, dan 1 simbol." << endl;
-//        return false;
-//    }
-//
-//    return true;
-//}
 
 // nyimpen data username dan password ke file sekaligus login
 

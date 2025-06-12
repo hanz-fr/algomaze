@@ -44,7 +44,7 @@ int main(int, char **)
 
         ImGui::Text("Choose Maze to Play");
         int maze_total = mazeCount("database/maze.txt");
-        static int selected = 0;
+        static int selected = -1;
         std::vector<std::vector<bool>> default_maze = initiateMaze();
 
         // LOOPING MAZE YANG DEFAULT
