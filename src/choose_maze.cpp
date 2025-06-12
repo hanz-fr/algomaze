@@ -44,7 +44,7 @@ int main(int, char **)
 
         ImGui::Text("Choose Maze to Play");
         int maze_total = mazeCount("database/maze.txt");
-        static int selected = 0;
+        static int selected = -1;
         std::vector<std::vector<bool>> default_maze = initiateMaze();
 
         // LOOPING MAZE YANG DEFAULT
@@ -85,7 +85,7 @@ int main(int, char **)
 
             // radio button buat di pilih
             std::string radio_button_label = "Maze " + std::to_string(i + 1);
-            ImGui::RadioButton(radio_button_label.c_str(), &selected, i + 1);
+            ImGui::RadioButton(radio_button_label.c_str(), &selected, i);
 
             ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 1)); // spacing antara sel maze
             for (int maze_row = 0; maze_row < maze.size(); maze_row++)
