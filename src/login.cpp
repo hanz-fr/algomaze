@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <regex>
+#include <windows.h>
 #include <sstream>
 #include "../include/welcome_press_any_key.h"
 #include "../include/clear_screen.h"
@@ -144,11 +145,32 @@ void createLoginSession(const string &username)
     sessionFile << username << endl;
 };
 
+string passwordConfiguration()
+{
+    HANDLE hStdInput = GetStdHandle(STD_INPUT_HANDLE);
+    DWORD mode = 0;
+
+    GetConsoleMode(hStdInput, &mode);
+
+
+    SetConsoleMode(hStdInput, mode & (~ENABLE_ECHO_INPUT));
+
+    string ipt;
+
+    cin.ignore();
+    getline(cin, ipt);
+
+    cout << endl;
+
+
+    SetConsoleMode(hStdInput, mode);
+
+    return ipt;
+}
+
 void menuLoginorRegister()
 {
     string username, password, input;
-
-
 
     while (true)
     {
@@ -164,18 +186,17 @@ void menuLoginorRegister()
             {
                 cout << "=== Register ===" << endl;
                 cout << "Masukkan username: ";
-                cin >> username;
+                cin.ignore();
+                getline(cin, username);
 
                 cout << "Masukkan password: ";
-                cin >> password;
+                password = passwordConfiguration();
 
                 if (validationUsername(username))  
                 {
                     registerUser(username, password);
                     break;
                 }
-
-                
             }
         }
         else if (input == "1")
@@ -187,10 +208,11 @@ void menuLoginorRegister()
             {
                 cout << "=== Login ===" << endl;
                 cout << "Masukkan username: ";
-                cin >> username;
+                cin.ignore();
+                getline(cin, username);
 
                 cout << "Masukkan password: ";
-                cin >> password;
+                password = passwordConfiguration();
 
                 if (login(username, password))
                 {
