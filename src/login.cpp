@@ -157,7 +157,7 @@ string passwordConfiguration()
 
     string ipt;
 
-    cin.ignore();
+    
     getline(cin, ipt);
 
     cout << endl;
