@@ -1,4 +1,3 @@
-// --- Include semua header yang dibutuhkan oleh logika game ---
 #include "../include/game.h"
 #include "../include/timer.h"          
 #include "../include/countdown.h"       
@@ -53,7 +52,7 @@ int game(bool isChallengeMode) {
     std::map<int, std::vector<int>> maze_graph = buildGraph(maze);
 
     if (isChallengeMode) {
-        startCountdown(180); 
+        startCountdown(60); 
     } else {
         startTimer(); 
     }
@@ -66,9 +65,11 @@ int game(bool isChallengeMode) {
             std::cout << "WAKTU HABIS!\n";
             std::cout << "Anda gagal menyelesaikan labirin tepat waktu.\n\n";
             std::cout << "Tekan tombol apa saja untuk kembali ke menu utama...";
-            getch();
-            if (getch() == 0 || getch() == -32 || getch() == 224) getch();
-            break; 
+            int key = getch();
+            if (key == 0 || key == -32 || key == 224) { // Menangani sisa input dari tombol panah
+                getch();
+            }
+            break;
         }
 
         // 2. RENDER TAMPILAN

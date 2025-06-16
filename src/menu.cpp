@@ -52,12 +52,12 @@ int mainMenu()
         case 1:
             cin.ignore();
             clearScreen();
-            game(true);
+            game(false);
             break;
         case 2:
             cin.ignore();
             clearScreen();
-            game(false);
+            game(true);
             break;
         case 3:
             showLeaderboard();
