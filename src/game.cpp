@@ -24,14 +24,12 @@
 #include <thread>  
 #include <chrono>  
 
-// Implementasi fungsi game yang bisa menangani kedua mode
 int game(bool isChallengeMode) {
     
     int player_row_pos, player_col_pos;
     int maze_exit_row, maze_exit_col;
     std::vector<std::vector<bool>> maze;
 
-    // Mendapatkan maze yang saat ini sedang dipilih
     int currentMazeIndex = viewCurrentSelectedMaze("database/currentMaze.txt");
     
     // Kondisi kalau maze yang dipilih itu default
@@ -52,14 +50,12 @@ int game(bool isChallengeMode) {
         maze = readMazeFromDB("database/maze.txt", currentMazeIndex);
     }
 
-    // Mengubah maze menjadi struktur graf
     std::map<int, std::vector<int>> maze_graph = buildGraph(maze);
 
-    // Memulai timer yang sesuai berdasarkan mode permainan
     if (isChallengeMode) {
-        startCountdown(180); // Mulai countdown 3 menit untuk Mode Tantangan
+        startCountdown(180); 
     } else {
-        startTimer(); // Mulai stopwatch Anda untuk Mode Klasik/Peringkat
+        startTimer(); 
     }
 
     while (true) {
@@ -89,22 +85,22 @@ int game(bool isChallengeMode) {
         // 3. PROSES INPUT PEMAIN
         char c;
         if (isChallengeMode) {
-            // Untuk mode tantangan, kita perlu loop yang tidak berhenti (non-blocking)
+            
             if (_kbhit()){
                 c = getch();
             } else {
                 std::this_thread::sleep_for(std::chrono::milliseconds(50));
-                continue; // Lanjut ke iterasi loop berikutnya untuk update timer
+                continue;
             }
         } else {
-            // Untuk mode klasik, bisa berhenti menunggu input (blocking)
+            
             c = getch();
         }
 
         // Handle ESC untuk kembali ke menu
         if (c == 27) {
             if (isChallengeMode) stopCountdown();
-            // Tidak perlu stopTimer() karena kita tidak menyimpan progres jika keluar di tengah jalan
+            
             break; 
         }
 
@@ -113,7 +109,7 @@ int game(bool isChallengeMode) {
             showHelpDijkstra(player_row_pos, player_col_pos, maze_exit_row, maze_exit_col, maze, maze_graph);
             std::cout << "\nTekan tombol apa saja untuk melanjutkan permainan...";
             getch();
-            continue; // Lanjut ke iterasi berikutnya untuk render ulang layar
+            continue; 
         }
         
         // Handle Gerakan Pemain (arrow keys)
@@ -140,7 +136,7 @@ int game(bool isChallengeMode) {
                         stopCountdown();
                         int sisa_waktu = getCountdownTimeLeft();
                         std::cout << "Anda menyelesaikan dengan sisa waktu: " << sisa_waktu << " detik.\n";
-                        // Di sini Anda bisa menambahkan logika leaderboard untuk mode tantangan
+                        
                     } else {
                         double time_taken = stopTimer();
                         std::string username;
@@ -157,13 +153,13 @@ int game(bool isChallengeMode) {
                     int inp;
                     std::cin >> inp;
                     if(inp == 1) {
-                         return game(isChallengeMode); // Ulang game dengan mode yang sama
+                         return game(isChallengeMode); 
                     } else {
-                         return 0; // Kembali ke menu utama
+                         return 0; 
                     }
                 }
             }
         }
     }
-    return 0; // Kembali ke menu utama
+    return 0; 
 }
