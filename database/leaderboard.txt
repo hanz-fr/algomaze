@@ -8,3 +8,4 @@
 1|admin 7.08164
 -1|admin 36.1695
 -1|SDArevisi 102.691
+1|Ricie123 5.99507

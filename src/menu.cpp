@@ -1,6 +1,8 @@
 #include <iostream>
 #include <windows.h>
 #include <filesystem>
+#include <thread>
+#include <cstdlib>
 #include "../include/clear_screen.h"
 #include "../include/menu.h"
 #include "../include/main.h"
@@ -11,11 +13,18 @@
 
 using namespace std;
 
-std::filesystem::path cwd = std::filesystem::current_path(); // Get current working directory
-std::filesystem::path draw_maze_execute_command = cwd / "build" / "draw_maze.exe"; // command to execute draw_maze
-std::filesystem::path choose_maze_execute_command = cwd / "build" / "choose_maze.exe"; // command to execute choose_maze
+std::filesystem::path cwd = std::filesystem::current_path();                               // Get current working directory
+std::filesystem::path draw_maze_execute_command = cwd / "build" / "draw_maze.exe";         // command to execute draw_maze
+std::filesystem::path choose_maze_execute_command = cwd / "build" / "choose_maze.exe";     // command to execute choose_maze
+std::filesystem::path countdown_gui_execute_command = cwd / "build" / "countdown_gui.exe"; // command to execute choose_maze
 std::string draw_maze_path = "\"" + draw_maze_execute_command.string() + "\"";
 std::string choose_maze_path = "\"" + choose_maze_execute_command.string() + "\"";
+std::string countdown_gui_path = "\"" + countdown_gui_execute_command.string() + "\"";
+
+void launchGUI(std::string path)
+{
+    system(path.c_str()); // GUI will run here
+}
 
 void showTitle()
 {
@@ -26,8 +35,8 @@ void showTitle()
 
 void showMainMenu()
 {
-    cout << "1. Play Game\n";
-    cout << "2. Mode Tantangan\n";
+    cout << "1. Play Time Limited  Mode\n";
+    cout << "2. Play Speedrun Mode\n";
     cout << "3. Leaderboard\n";
     cout << "4. Pilih Maze\n";
     cout << "5. Gambar Maze\n";
@@ -49,11 +58,14 @@ int mainMenu()
 
         switch (choice)
         {
-        case 1:
+        case 1: {
             cin.ignore();
             clearScreen();
-            game(true);
+            std::thread guiThread(launchGUI, countdown_gui_path); // Run GUI in parallel
+            guiThread.detach();                                   // Let it run independently
+            game(true);                                           // Immediately go to game
             break;
+        }
         case 2:
             cin.ignore();
             clearScreen();

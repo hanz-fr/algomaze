@@ -73,5 +73,6 @@
         "set": "cpp",
         "array": "cpp",
         "filesystem": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "C:/Users/Hanz/Development/C++ Experimental/algomaze-cli/imgui/examples/example_android_opengl3"
 }
