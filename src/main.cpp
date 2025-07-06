@@ -36,185 +36,185 @@ int main () {
     return 0;
 }
 
-int game ()
-{
-    int c = 0;
+// int game ()
+// {
+//     int c = 0;
 
-    // declare player starting position
-    int player_row_pos;
-    int player_col_pos;
+//     // declare player starting position
+//     int player_row_pos;
+//     int player_col_pos;
 
-    // declare maze finish position
-    int maze_exit_row;
-    int maze_exit_col;
+//     // declare maze finish position
+//     int maze_exit_row;
+//     int maze_exit_col;
 
-    // declare maze
-    std::vector<std::vector<bool>> maze;
+//     // declare maze
+//     std::vector<std::vector<bool>> maze;
 
-    // dapetin maze yang saat ini sedang dipilih
-    int currentMazeIndex = viewCurrentSelectedMaze("database/currentMaze.txt");
+//     // dapetin maze yang saat ini sedang dipilih
+//     int currentMazeIndex = viewCurrentSelectedMaze("database/currentMaze.txt");
     
-    /* Kondisi kalau maze yang dipilih itu default */
-    if (currentMazeIndex == -1)
-    {
-        player_row_pos = 0;
-        player_col_pos = 1;
+//     /* Kondisi kalau maze yang dipilih itu default */
+//     if (currentMazeIndex == -1)
+//     {
+//         player_row_pos = 0;
+//         player_col_pos = 1;
 
-        maze_exit_row = 24;
-        maze_exit_col = 16;
+//         maze_exit_row = 24;
+//         maze_exit_col = 16;
 
-        maze = initiateMaze();
-    }
-    /* Kondisi kalau maze yang dipilih itu maze custom */
-    else
-    {
-        auto [start, end] = getCurrentMazeStartAndFinish("database/maze.txt", currentMazeIndex);
-        std::cout << "Start: (" << start.first << "," << start.second << ")\n";
-        std::cout << "End: (" << end.first << "," << end.second << ")\n";
+//         maze = initiateMaze();
+//     }
+//     /* Kondisi kalau maze yang dipilih itu maze custom */
+//     else
+//     {
+//         auto [start, end] = getCurrentMazeStartAndFinish("database/maze.txt", currentMazeIndex);
+//         std::cout << "Start: (" << start.first << "," << start.second << ")\n";
+//         std::cout << "End: (" << end.first << "," << end.second << ")\n";
 
-        player_row_pos = start.first; // titik baris start
-        player_col_pos = start.second; // titik kolom start
+//         player_row_pos = start.first; // titik baris start
+//         player_col_pos = start.second; // titik kolom start
 
-        maze_exit_row = end.first; // titik baris finish
-        maze_exit_col = end.second; // titik kolom finish
+//         maze_exit_row = end.first; // titik baris finish
+//         maze_exit_col = end.second; // titik kolom finish
 
-        maze = readMazeFromDB("database/maze.txt", currentMazeIndex);
-    }
+//         maze = readMazeFromDB("database/maze.txt", currentMazeIndex);
+//     }
 
-     // convert to graph (adjacency matrix)
-     std::map<int, std::vector<int>> maze_graph = buildGraph(maze);
+//      // convert to graph (adjacency matrix)
+//      std::map<int, std::vector<int>> maze_graph = buildGraph(maze);
 
-    startTimer(); //mulai waktunya //perubahan
+//     startTimer(); //mulai waktunya //perubahan
 
-    // initial render of player and maze
-    showPlayerPos(player_row_pos, player_col_pos);
-    renderMaze(player_row_pos, player_col_pos, maze);
+//     // initial render of player and maze
+//     showPlayerPos(player_row_pos, player_col_pos);
+//     renderMaze(player_row_pos, player_col_pos, maze);
 
-    while (true)
-    {
-        char c = getch();
+//     while (true)
+//     {
+//         char c = getch();
         
-        if (c == 27 ) {
-            std::cout << "ESC pressed, exiting...\n";
-            clearScreen();
-            mainMenu();
-            return 0;
-        }
+//         if (c == 27 ) {
+//             std::cout << "ESC pressed, exiting...\n";
+//             clearScreen();
+//             mainMenu();
+//             return 0;
+//         }
 
-        if (c == 0 || c == -32)
-        {
-            c = getch();
-            int new_row = player_row_pos;
-            int new_col = player_col_pos;
+//         if (c == 0 || c == -32)
+//         {
+//             c = getch();
+//             int new_row = player_row_pos;
+//             int new_col = player_col_pos;
 
-            switch (c)
-            {
-            case KEY_UP:
-                new_row--;
-                break;
-            case KEY_DOWN:
-                new_row++;
-                break;
-            case KEY_LEFT:
-                new_col--;
-                break;
-            case KEY_RIGHT:
-                new_col++;
-                break;
-            }
+//             switch (c)
+//             {
+//             case KEY_UP:
+//                 new_row--;
+//                 break;
+//             case KEY_DOWN:
+//                 new_row++;
+//                 break;
+//             case KEY_LEFT:
+//                 new_col--;
+//                 break;
+//             case KEY_RIGHT:
+//                 new_col++;
+//                 break;
+//             }
 
-            if (isPlayerMoveValid(new_row, new_col, maze))
-            {
-                player_row_pos = new_row;
-                player_col_pos = new_col;
+//             if (isPlayerMoveValid(new_row, new_col, maze))
+//             {
+//                 player_row_pos = new_row;
+//                 player_col_pos = new_col;
 
-                // only render when move is valid
-                // show congrats when maze completed
-                if (isCompleted(player_row_pos, player_col_pos, maze))
-                {
-                    clearScreen();
+//                 // only render when move is valid
+//                 // show congrats when maze completed
+//                 if (isCompleted(player_row_pos, player_col_pos, maze))
+//                 {
+//                     clearScreen();
 
-                    double time = stopTimer(); //perubahan 
-                    std::string username;
-                    {
-                        std::ifstream sessionFile("database/loginSession.txt");
-                        if (sessionFile.is_open()) 
-                        {
-                            std::getline(sessionFile, username);
-                            sessionFile.close();
-                        } else {
-                            username = "Unknown";
-                        }
-                    }
+//                     double time = stopTimer(); //perubahan 
+//                     std::string username;
+//                     {
+//                         std::ifstream sessionFile("database/loginSession.txt");
+//                         if (sessionFile.is_open()) 
+//                         {
+//                             std::getline(sessionFile, username);
+//                             sessionFile.close();
+//                         } else {
+//                             username = "Unknown";
+//                         }
+//                     }
 
-                    saveToLeaderboard(username, time);
-                    std::cout << "Waktu penyelesaian: " << time << " detik" << std::endl;
-                    // std::cout << "Total gerakan: " << totalMoves() << std::endl;
-                    int inp;
+//                     saveToLeaderboard(username, time);
+//                     std::cout << "Waktu penyelesaian: " << time << " detik" << std::endl;
+//                     // std::cout << "Total gerakan: " << totalMoves() << std::endl;
+//                     int inp;
 
-                    std::cout << "Selamat anda telah menyelesaikan labirin ini! \n";
-                    std::cout << "Berikut hadiah untuk anda: \n";
-                    std::cout << "[1] Ulang \n";
-                    std::cout << "[2] Liat rangking \n";
-                    std::cout << "[3] Keluar \n";
-                    std::cout << "> ";
-                    std::cin >> inp;
+//                     std::cout << "Selamat anda telah menyelesaikan labirin ini! \n";
+//                     std::cout << "Berikut hadiah untuk anda: \n";
+//                     std::cout << "[1] Ulang \n";
+//                     std::cout << "[2] Liat rangking \n";
+//                     std::cout << "[3] Keluar \n";
+//                     std::cout << "> ";
+//                     std::cin >> inp;
 
-                    if (inp == 1)
-                    {
-                        std::cout << "Mengulang kembali...";
+//                     if (inp == 1)
+//                     {
+//                         std::cout << "Mengulang kembali...";
 
-                        player_row_pos = 0;
-                        player_col_pos = 1;
+//                         player_row_pos = 0;
+//                         player_col_pos = 1;
 
-                        clearScreen();
-                        startTimer();
-                        showPlayerPos(player_row_pos, player_col_pos);
-                        renderMaze(player_row_pos, player_col_pos, maze);
-                    }
-                    else if (inp == 2)
-                    {
-                        showLeaderboard();
+//                         clearScreen();
+//                         startTimer();
+//                         showPlayerPos(player_row_pos, player_col_pos);
+//                         renderMaze(player_row_pos, player_col_pos, maze);
+//                     }
+//                     else if (inp == 2)
+//                     {
+//                         showLeaderboard();
 
-                        std::cout << "Tekan ENTER untuk kembali ke menu...";
-                        std::cin.ignore();
-                        std::cin.get();
-                        mainMenu();
-                        return 0;
-                    }
-                    else if (inp == 3)
-                    {
-                        mainMenu();
-                        return 0;
-                    }
-                    else
-                    {
-                        std::cout << "Input tidak valid!\n";
-                        std::cout << "Memberhentikan program...\n";
-                        break;
-                    }
-                }
-                else
-                {
-                    clearScreen();
-                    showPlayerPos(player_row_pos, player_col_pos);
-                    renderMaze(player_row_pos, player_col_pos, maze);
-                    std::cout << "\nButuh bantuan? Tekan H untuk meminta bantuan.\n";
-                }
-            }
+//                         std::cout << "Tekan ENTER untuk kembali ke menu...";
+//                         std::cin.ignore();
+//                         std::cin.get();
+//                         mainMenu();
+//                         return 0;
+//                     }
+//                     else if (inp == 3)
+//                     {
+//                         mainMenu();
+//                         return 0;
+//                     }
+//                     else
+//                     {
+//                         std::cout << "Input tidak valid!\n";
+//                         std::cout << "Memberhentikan program...\n";
+//                         break;
+//                     }
+//                 }
+//                 else
+//                 {
+//                     clearScreen();
+//                     showPlayerPos(player_row_pos, player_col_pos);
+//                     renderMaze(player_row_pos, player_col_pos, maze);
+//                     std::cout << "\nButuh bantuan? Tekan H untuk meminta bantuan.\n";
+//                 }
+//             }
         
-        }
-        else if ( c == 'h' || c == 'H')
-        {
-            showHelpDijkstra(player_row_pos, player_col_pos, maze_exit_row, maze_exit_col, maze, maze_graph);
-        }
-        else if (c == 'q' || c == 'Q')
-        {
-            std::cout << "Program telah selesai.\n";
-            break;
-        }
-    }
+//         }
+//         else if ( c == 'h' || c == 'H')
+//         {
+//             showHelpDijkstra(player_row_pos, player_col_pos, maze_exit_row, maze_exit_col, maze, maze_graph);
+//         }
+//         else if (c == 'q' || c == 'Q')
+//         {
+//             std::cout << "Program telah selesai.\n";
+//             break;
+//         }
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
 

@@ -7,6 +7,7 @@
 #include "../include/login.h"
 #include "../include/welcome_press_any_key.h"
 #include "../include/leaderboard.h"
+#include "../include/game.h"
 
 using namespace std;
 
@@ -26,11 +27,12 @@ void showTitle()
 void showMainMenu()
 {
     cout << "1. Play Game\n";
-    cout << "2. Leaderboard\n";
-    cout << "3. Pilih Maze\n";
-    cout << "4. Gambar Maze\n";
-    cout << "5. Logout\n";
-    cout << "6. Quit\n";
+    cout << "2. Mode Tantangan\n";
+    cout << "3. Leaderboard\n";
+    cout << "4. Pilih Maze\n";
+    cout << "5. Gambar Maze\n";
+    cout << "6. Logout\n";
+    cout << "7. Quit\n";
     cout << "==============================\n\n";
 }
 
@@ -50,30 +52,35 @@ int mainMenu()
         case 1:
             cin.ignore();
             clearScreen();
-            game();
+            game(false);
             break;
         case 2:
+            cin.ignore();
+            clearScreen();
+            game(true);
+            break;
+        case 3:
             showLeaderboard();
             std::cout << "Tekan ENTER untuk kembali ke menu...";
             std::cin.ignore();
             std::cin.get();
             mainMenu();
             return 0;
-        case 3:
+        case 4:
             system(choose_maze_path.c_str());
             mainMenu();
             break;
-        case 4:
+        case 5:
             system(draw_maze_path.c_str());
             mainMenu();
             return 0;
-        case 5:
+        case 6:
             cin.ignore();
             cout << "\nAnda telah logout dari Algomaze.\n";
             clearScreen();
             menuLoginorRegister();
             break;
-        case 6:
+        case 7:
             cout << "\nTerima kasih telah bermain Algomaze!\n";
             return -1;
         default:
